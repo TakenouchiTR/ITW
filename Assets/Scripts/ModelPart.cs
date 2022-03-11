@@ -7,12 +7,9 @@ public class ModelPart : MonoBehaviour
 {
     const float MoveSpeed = 5;
     bool isActive = false;
-    bool hasMoved = false;
+    int curStep = 0;
     Vector3 moveLocation;
     Vector3 startLocation;
-
-    [SerializeField]
-    Vector3 moveOffset;
 
     public event EventHandler ActionCompleted;
 
@@ -27,10 +24,13 @@ public class ModelPart : MonoBehaviour
         }
     }
 
+    public List<PartState> Steps { get; set; } = new List<PartState>();
+
     // Start is called before the first frame update
     void Start()
     {
         startLocation = transform.position;
+        moveLocation = startLocation;
     }
 
     // Update is called once per frame
@@ -41,25 +41,42 @@ public class ModelPart : MonoBehaviour
             float step = MoveSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, moveLocation, step);
             IsMoving = transform.position != moveLocation;
-        }
-    }
 
-    void Activate()
-    {
-        IsActive = true;
+            if (!IsMoving && curStep < Steps.Count - 1)
+            {
+                IsActive = moveLocation != startLocation + Steps[curStep + 1].Position;
+                moveLocation = Steps[curStep + 1].Position;
+            }
+        }
     }
 
     public void Interact()
     {
-        if (!isActive)
+        if (!IsActive || IsMoving)
             return;
-
-        moveLocation = hasMoved ? startLocation : startLocation + moveOffset;
 
         IsActive = false;
         IsMoving = true;
-        hasMoved = !hasMoved;
+        moveLocation = curStep < Steps.Count - 1 ? startLocation + Steps[curStep + 1].Position : moveLocation;
         ActionCompleted?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void GotoStep(int step)
+    {
+        if (step < 0 || step >= Steps.Count)
+            return;
+
+        Vector3 newPosition = Steps[step].Position;
+
+        //Moves if the part isn't in place for the step
+        IsMoving = moveLocation != startLocation + newPosition;
+
+        //Sets the next move location
+        moveLocation = startLocation + newPosition;
+
+        //Makes the part active if it is not at where it needs to be in the NEXT step
+        IsActive = step < Steps.Count - 1 && Steps[step + 1].Position != newPosition;
+        curStep = step;
     }
 
     private void OnMouseDown()

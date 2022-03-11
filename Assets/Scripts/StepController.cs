@@ -7,10 +7,13 @@ using System;
 
 public class StepController : MonoBehaviour
 {
-    Step[] steps;
-    int stepIndex;
+    int curStep;
+    int totalSteps;
     int totalActions;
     int actionsRemaining;
+
+    string[] titles;
+    string[] instructionTexts;
 
     [SerializeField]
     TextMeshProUGUI title;
@@ -24,14 +27,19 @@ public class StepController : MonoBehaviour
     [SerializeField]
     ModelPart[] parts;
 
+    bool CanStartStep => !parts.Any(p => p.IsMoving);
+
     private void Start()
     {
         foreach (var part in parts)
         {
             part.ActionCompleted += OnActionComplete;
         }
+        totalSteps = 5;
+        titles = new string[totalSteps];
+        instructionTexts = new string[totalSteps];
         CreateDefaultSteps();
-        StartStep();
+        StartStep(0);
     }
 
     private void UpdateActionsRemainingDisplay()
@@ -41,146 +49,107 @@ public class StepController : MonoBehaviour
 
     void CreateDefaultSteps()
     {
-        Step step1 = new Step
-        (
-            "Remove the Back Doors",
-            "This where the instructions for what to do for a given step go. You should follow these " +
-                "instructions if you want to complete the step. Failure to follow the instructions " +
-                "written at the bottom of the screen may result in a step not being completed. " +
-                "Incomplete steps are not complete, which may cause issues when trying to complete the step.",
-            new StepCommand[]
-            {
-                new StepCommand(0, "Activate"),
-                new StepCommand(1, "Activate"),
-            }
-        );
-        Step step1_1 = new Step
-        (
-            "Remove the Front Doors",
-            "Now that the back doors have been removed, the front doors can be safely removed as well. Ipsum " +
-                "Lorem and all that jazz",
-            new StepCommand[]
-            {
-                new StepCommand(2, "Activate"),
-                new StepCommand(3, "Activate"),
-            }
-        );
+        parts[0].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
+        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
+        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
+        parts[0].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step step2 = new Step
-        (
-            "Re-attach the Doors",
-            "Now that the doors have been removed, please re-attach them to the helicopter. The helicopter " +
-                "cannot be flown if the doors are not attached. Therefore, the doors should be attached so that " +
-                "the helicopter can be flown once again.",
-            new StepCommand[]
-            {
-                new StepCommand(0, "Activate"),
-                new StepCommand(1, "Activate"),
-            }
-        );
+        parts[1].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
+        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
+        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
+        parts[1].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step step3 = new Step
-        (
-            "Re-remove the Left Door",
-            "Please remove the left door once again. There may have been an issue in the previous step.",
-            new StepCommand[]
-            {
-                new StepCommand(0, "Activate"),
-            }
-        );
+        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[2].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
+        parts[2].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
+        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step step4 = new Step
-        (
-            "Re-re-attach the Left Door",
-            "Now that the left door has been removed again, it must be attached again. Please attach the door to the " +
-                "helicopter again. Once it is attached, it will be on the helicopter.",
-            new StepCommand[]
-            {
-                new StepCommand(0, "Activate"),
-            }
-        );
+        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[3].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
+        parts[3].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
+        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step step5 = new Step
-        (
-            "Remove Screws from Between Windshields",
-            "Remove the five screws from the frame between the two windshields.",
-            new StepCommand[]
-            {
-                new StepCommand(4, "Activate"),
-                new StepCommand(5, "Activate"),
-                new StepCommand(6, "Activate"),
-                new StepCommand(7, "Activate"),
-                new StepCommand(8, "Activate"),
-            }
-        );
+        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
+        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step step6 = new Step
-        (
-            "Re-attach all parts",
-            "Re-attach all the parts that are currently removed from the chassis.",
-            new StepCommand[]
-            {
-                new StepCommand(4, "Activate"),
-                new StepCommand(5, "Activate"),
-                new StepCommand(6, "Activate"),
-                new StepCommand(7, "Activate"),
-                new StepCommand(8, "Activate"),
-                new StepCommand(2, "Activate"),
-                new StepCommand(3, "Activate"),
-            }
-        );
+        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
+        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        Step finalStep = new Step
-        (
-            "Complete",
-            "The Demo has been completed.",
-            new StepCommand[]
-            {
-                
-            }
-        );
+        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
+        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
 
-        steps = new Step[] {
-            step1,
-            step1_1,
-            step2,
-            step3,
-            step4,
-            step5,
-            step6,
-            finalStep,
-        };
+        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
+        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+
+        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
+        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+
+        titles[0] = "Remove the back doors";
+        titles[1] = "Remove the front doors";
+        titles[2] = "Remove the screws";
+        titles[3] = "Attach all the parts";
+        titles[4] = "All done";
+
+        instructionTexts[0] = "Remove the <link=temp>back doors please</link>";
+        instructionTexts[1] = "Remove the front doors please";
+        instructionTexts[2] = "Remove the screws please";
+        instructionTexts[3] = "Attach all the parts please";
+        instructionTexts[4] = "All done please";
     }
 
-    public void StartStep()
+    public void StartStep(int step)
     {
-        Debug.Log(stepIndex);
-        if (stepIndex > steps.Length || parts.Any(part => part.IsMoving))
+        if (!CanStartStep)
             return;
-
-        foreach (var part in parts.Where(part => part.IsActive))
+        title.text = titles[step];
+        instructions.text = instructionTexts[step];
+        foreach (var part in parts)
         {
-            part.Interact();
+            part.GotoStep(step);
         }
+    }
+    
+    public void GotoStep(int step)
+    {
+        if (!CanStartStep)
+            return;
+        curStep = step;
+        StartStep(step);
+    }
 
-        if (stepIndex < steps.Length)
-        {
-            Step currentStep = steps[stepIndex];
-            StepCommand[] commands = currentStep.Commands;
+    public void OnNextClicked()
+    {
+        if (!CanStartStep)
+            return;
+        curStep = curStep < totalSteps - 1 ? curStep + 1 : curStep;
+        StartStep(curStep);
+    }
 
-            title.text = currentStep.Title;
-            instructions.text = currentStep.Instructions;
-
-            foreach (var command in commands)
-            {
-                parts[command.PartIndex].Invoke(command.Method, 0);
-            }
-            stepIndex++;
-
-            totalActions = commands.Length;
-            actionsRemaining = commands.Length;
-            UpdateActionsRemainingDisplay();
-        }
+    public void OnPrevClicked()
+    {
+        if (!CanStartStep)
+            return;
+        curStep = curStep == 0 ? 0 : curStep - 1;
+        StartStep(curStep);
     }
     
     public void OnActionComplete(object sender, EventArgs e)
