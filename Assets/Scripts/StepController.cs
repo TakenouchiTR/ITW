@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using System;
+using Assets.Scripts;
 
 public class StepController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class StepController : MonoBehaviour
     int totalSteps;
     int totalActions;
     int actionsRemaining;
+    bool isActive = true;
 
     string[] titles;
     string[] instructionTexts;
@@ -31,6 +33,7 @@ public class StepController : MonoBehaviour
 
     private void Start()
     {
+        FindObjectOfType<ClickableText>().LinkClicked += OnClickableTextLinkedClicked;
         foreach (var part in parts)
         {
             part.ActionCompleted += OnActionComplete;
@@ -40,6 +43,22 @@ public class StepController : MonoBehaviour
         instructionTexts = new string[totalSteps];
         CreateDefaultSteps();
         StartStep(0);
+    }
+
+    private void OnClickableTextLinkedClicked(object sender, LinkCommand e)
+    {
+        if (!isActive)
+            return;
+
+        switch (e.Type)
+        {
+            case LinkCommandType.JUMP:
+                int stepNumber = int.Parse(e.Data);
+                GotoStep(stepNumber);
+                break;
+            case LinkCommandType.STUT:
+                break;
+        }
     }
 
     private void UpdateActionsRemainingDisplay()
@@ -109,7 +128,7 @@ public class StepController : MonoBehaviour
         titles[3] = "Attach all the parts";
         titles[4] = "All done";
 
-        instructionTexts[0] = "Remove the <link=temp>back doors please</link>";
+        instructionTexts[0] = "Remove the back doors please.\n To jump to the last step, <link=\"JUMP 3\"><color=blue><u>click me.</u></color></link>";
         instructionTexts[1] = "Remove the front doors please";
         instructionTexts[2] = "Remove the screws please";
         instructionTexts[3] = "Attach all the parts please";
