@@ -26,8 +26,7 @@ public class ModelPart : MonoBehaviour
 
     public List<PartState> Steps { get; set; } = new List<PartState>();
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         startLocation = transform.position;
         moveLocation = startLocation;
@@ -76,6 +75,19 @@ public class ModelPart : MonoBehaviour
 
         //Makes the part active if it is not at where it needs to be in the NEXT step
         IsActive = step < Steps.Count - 1 && Steps[step + 1].Position != newPosition;
+        curStep = step;
+    }
+
+    public void GotoStepInstantly(int step)
+    {
+        if (step < 0 || step >= Steps.Count)
+            return;
+
+        Vector3 newPosition = Steps[step].Position;
+        transform.position = startLocation + newPosition;
+
+        IsActive = step < Steps.Count - 1 && Steps[step + 1].Position != newPosition;
+        IsMoving = false;
         curStep = step;
     }
 

@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ClickableText : MonoBehaviour
 {
-    public event EventHandler<LinkCommand> LinkClicked;
+    public UnityEvent<LinkCommand> LinkClicked;
 
     // Update is called once per frame
     void Update()
@@ -22,7 +23,7 @@ public class ClickableText : MonoBehaviour
                 string linkId = linkInfo.GetLinkID();
                 string linkCode = linkId.Substring(0, 4);
                 string linkData = linkId.Substring(5);
-                LinkClicked?.Invoke(this, new LinkCommand(linkCode, linkData));
+                LinkClicked?.Invoke(new LinkCommand(linkCode, linkData));
             }
         }
     }

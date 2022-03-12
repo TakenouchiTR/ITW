@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatableLight : MonoBehaviour
+public class Sun : MonoBehaviour
 {
     static readonly Color DayColor = new Color(255, 244, 214);
     static readonly Color NightColor = new Color(6, 9, 41);
 
     Vector3 startingEulers;
-    Light light;
+    Light lightComponent;
 
     private void Start()
     {
         startingEulers = transform.rotation.eulerAngles;
-        light = GetComponent<Light>();
+        lightComponent = GetComponent<Light>();
     }
 
     public void Rotate(float degrees)
@@ -22,11 +22,11 @@ public class RotatableLight : MonoBehaviour
         if (rotation.x > 180 || rotation.x < 0)
         {
             rotation.x *= -1;
-            light.color = NightColor;
+            lightComponent.color = NightColor;
         }
         else
         {
-            light.color = DayColor;
+            lightComponent.color = DayColor;
         }
         transform.rotation = Quaternion.Euler(rotation);
     }

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: InteractableGlowSolid
+  m_Name: SnowmanEyes
   m_Shader: {fileID: -6465566751694194690, guid: ea9d7436ca3f7344aae2f4f500540d16, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -80,10 +80,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1830c525c41e485aab53ccc3faeb8ea3: 1
+    - Vector1_1830c525c41e485aab53ccc3faeb8ea3: 0
     - Vector1_2b2a031124304b289cc3e8dcc6357d7e: 3
     - Vector1_3f0abd2eebcb4691ad79512e911f4230: 1
-    - Vector1_805cfc64f8054734a93c41cd90914429: 1
+    - Vector1_805cfc64f8054734a93c41cd90914429: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -113,7 +113,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_3204ed062a764dfc953487d32e7f966c: {r: 0.6284009, g: 1, b: 0.495283, a: 0}
-    - Color_c3eef743104f41cc81633e2555937374: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 0}
+    - Color_c3eef743104f41cc81633e2555937374: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

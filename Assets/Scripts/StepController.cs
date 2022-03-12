@@ -8,57 +8,42 @@ using Assets.Scripts;
 
 public class StepController : MonoBehaviour
 {
-    int curStep;
-    int totalSteps;
-    int totalActions;
-    int actionsRemaining;
-    bool isActive = true;
+    protected int curStep;
+    protected int totalSteps;
+    protected int totalActions;
+    protected int actionsRemaining;
+    protected bool isActive = true;
 
-    string[] titles;
-    string[] instructionTexts;
+    protected string[] titles;
+    protected string[] instructionTexts;
 
-    [SerializeField]
     TextMeshProUGUI title;
-
-    [SerializeField]
     TextMeshProUGUI instructions;
-    
-    [SerializeField]
     TextMeshProUGUI txt_actionsRemaining;
 
     [SerializeField]
-    ModelPart[] parts;
+    protected ModelPart[] parts;
 
-    bool CanStartStep => !parts.Any(p => p.IsMoving);
+    protected bool CanStartStep => !parts.Any(p => p.IsMoving);
 
-    private void Start()
+    public int CurrentStep => curStep;
+
+    private void Awake()
     {
-        FindObjectOfType<ClickableText>().LinkClicked += OnClickableTextLinkedClicked;
+        title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
+        instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
+        txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
         foreach (var part in parts)
         {
             part.ActionCompleted += OnActionComplete;
         }
-        totalSteps = 5;
-        titles = new string[totalSteps];
-        instructionTexts = new string[totalSteps];
         CreateDefaultSteps();
         StartStep(0);
     }
 
-    private void OnClickableTextLinkedClicked(object sender, LinkCommand e)
+    private void Start()
     {
-        if (!isActive)
-            return;
-
-        switch (e.Type)
-        {
-            case LinkCommandType.JUMP:
-                int stepNumber = int.Parse(e.Data);
-                GotoStep(stepNumber);
-                break;
-            case LinkCommandType.STUT:
-                break;
-        }
+        
     }
 
     private void UpdateActionsRemainingDisplay()
@@ -66,8 +51,11 @@ public class StepController : MonoBehaviour
         txt_actionsRemaining.text = $"Actions Left: {actionsRemaining}/{totalActions}";
     }
 
-    void CreateDefaultSteps()
+    protected virtual void CreateDefaultSteps()
     {
+        totalSteps = 5;
+        titles = new string[totalSteps];
+        instructionTexts = new string[totalSteps];
         parts[0].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
         parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
         parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
@@ -131,11 +119,11 @@ public class StepController : MonoBehaviour
         instructionTexts[0] = "Remove the back doors please.\n To jump to the last step, <link=\"JUMP 3\"><color=blue><u>click me.</u></color></link>";
         instructionTexts[1] = "Remove the front doors please";
         instructionTexts[2] = "Remove the screws please";
-        instructionTexts[3] = "Attach all the parts please";
+        instructionTexts[3] = "Attach all the parts please\n To create a sub tutorial, <link=\"STUT 0,0\"><color=blue><u>click me.</u></color></link>";
         instructionTexts[4] = "All done please";
     }
 
-    public void StartStep(int step)
+    private void StartStep(int step)
     {
         if (!CanStartStep)
             return;
@@ -146,7 +134,7 @@ public class StepController : MonoBehaviour
             part.GotoStep(step);
         }
     }
-    
+
     public void GotoStep(int step)
     {
         if (!CanStartStep)
@@ -155,7 +143,19 @@ public class StepController : MonoBehaviour
         StartStep(step);
     }
 
-    public void OnNextClicked()
+    public void GotoStepInstantly(int step)
+    {
+        if (!CanStartStep)
+            return;
+        curStep = step;
+        title.text = titles[step];
+        instructions.text = instructionTexts[step];
+        foreach (var part in parts)
+        {
+            part.GotoStepInstantly(step);
+        }
+    }
+    public void GotoNextStep()
     {
         if (!CanStartStep)
             return;
@@ -163,14 +163,14 @@ public class StepController : MonoBehaviour
         StartStep(curStep);
     }
 
-    public void OnPrevClicked()
+    public void GotoPrevStep()
     {
         if (!CanStartStep)
             return;
         curStep = curStep == 0 ? 0 : curStep - 1;
         StartStep(curStep);
     }
-    
+
     public void OnActionComplete(object sender, EventArgs e)
     {
         actionsRemaining--;

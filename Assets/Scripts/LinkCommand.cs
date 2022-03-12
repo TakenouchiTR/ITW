@@ -26,7 +26,11 @@ namespace Assets.Scripts
 
     public enum LinkCommandType
     {
+        //JUMP <step: int>
         JUMP,
+        //STUT <index: int>,<step: int>
         STUT,
+        //RTRN <step: int>
+        RTRN,
     }
 }
