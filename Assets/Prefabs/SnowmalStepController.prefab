@@ -769,7 +769,7 @@ GameObject:
   - component: {fileID: 8985403369326921301}
   - component: {fileID: 8985403369326921302}
   m_Layer: 0
-  m_Name: MiniStepController
+  m_Name: SnowmalStepController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -805,7 +805,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8985403369326921303}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9d23e78e8306a24b872ffbfc28e8f76, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f2803bcb3a222d4db9cc3035ac0c6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parts:
@@ -816,3 +816,4 @@ MonoBehaviour:
   - {fileID: 462003208707374853}
   - {fileID: 3950405676067380177}
   - {fileID: 927965966548395375}
+  filePath: C:\Users\Shawn\Documents\TutorialTest\Snowman.stp

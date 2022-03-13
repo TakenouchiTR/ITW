@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using Assets.Scripts;
+using Assets.Scripts.IO;
 
 public class StepController : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class StepController : MonoBehaviour
     [SerializeField]
     protected ModelPart[] parts;
 
+    [SerializeField]
+    string filePath;
+
     protected bool CanStartStep => !parts.Any(p => p.IsMoving);
 
     public int CurrentStep => curStep;
@@ -37,13 +41,8 @@ public class StepController : MonoBehaviour
         {
             part.ActionCompleted += OnActionComplete;
         }
-        CreateDefaultSteps();
-        StartStep(0);
-    }
-
-    private void Start()
-    {
-        
+        LoadSteps();
+        GotoStepInstantly(0);
     }
 
     private void UpdateActionsRemainingDisplay()
@@ -51,76 +50,17 @@ public class StepController : MonoBehaviour
         txt_actionsRemaining.text = $"Actions Left: {actionsRemaining}/{totalActions}";
     }
 
-    protected virtual void CreateDefaultSteps()
+    protected virtual void LoadSteps()
     {
-        totalSteps = 5;
-        titles = new string[totalSteps];
-        instructionTexts = new string[totalSteps];
-        parts[0].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
-        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
-        parts[0].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
-        parts[0].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        TutorialData data = TutorialReader.ReadFile(filePath);
 
-        parts[1].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
-        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
-        parts[1].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
-        parts[1].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
+        titles = data.Titles;
+        instructionTexts = data.Instructions;
 
-        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[2].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
-        parts[2].Steps.Add(new PartState() { Position = new Vector3(-4, 0, 0) });
-        parts[2].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[3].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
-        parts[3].Steps.Add(new PartState() { Position = new Vector3(4, 0, 0) });
-        parts[3].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
-        parts[4].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
-        parts[5].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
-        parts[6].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
-        parts[7].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 1, .5f) });
-        parts[8].Steps.Add(new PartState() { Position = new Vector3(0, 0, 0) });
-
-        titles[0] = "Remove the back doors";
-        titles[1] = "Remove the front doors";
-        titles[2] = "Remove the screws";
-        titles[3] = "Attach all the parts";
-        titles[4] = "All done";
-
-        instructionTexts[0] = "Remove the back doors please.\n To jump to the last step, <link=\"JUMP 3\"><color=blue><u>click me.</u></color></link>";
-        instructionTexts[1] = "Remove the front doors please";
-        instructionTexts[2] = "Remove the screws please";
-        instructionTexts[3] = "Attach all the parts please\n To create a sub tutorial, <link=\"STUT 0,0\"><color=blue><u>click me.</u></color></link>";
-        instructionTexts[4] = "All done please";
+        for (int i = 0; i < parts.Length; i++)
+        {
+            parts[i].Steps = data.States[i].ToList();
+        }
     }
 
     private void StartStep(int step)
