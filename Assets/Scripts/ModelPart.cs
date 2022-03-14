@@ -26,7 +26,7 @@ public class ModelPart : MonoBehaviour
 
     public List<PartState> Steps { get; set; } = new List<PartState>();
 
-    private void Awake()
+    public void Initialize()
     {
         startLocation = transform.position;
         moveLocation = startLocation;

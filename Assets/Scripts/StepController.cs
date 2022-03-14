@@ -40,6 +40,7 @@ public class StepController : MonoBehaviour
         foreach (var part in parts)
         {
             part.ActionCompleted += OnActionComplete;
+            part.Initialize();
         }
         LoadSteps();
         GotoStepInstantly(0);
@@ -56,6 +57,7 @@ public class StepController : MonoBehaviour
 
         titles = data.Titles;
         instructionTexts = data.Instructions;
+        totalSteps = titles.Length;
 
         for (int i = 0; i < parts.Length; i++)
         {
@@ -95,6 +97,7 @@ public class StepController : MonoBehaviour
             part.GotoStepInstantly(step);
         }
     }
+    
     public void GotoNextStep()
     {
         if (!CanStartStep)
