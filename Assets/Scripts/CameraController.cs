@@ -8,23 +8,28 @@ public class CameraController : MonoBehaviour
     private const float BoostMult = 1.5f;
     private const float MouseSensitivity = 500;
 
-    float xRotation = 0;
-    float yRotation = 0;
+    private float xRotation = 0;
+    private float yRotation = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        xRotation = transform.rotation.eulerAngles.x;
+        yRotation = transform.rotation.eulerAngles.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
+        HandleInput();
         HandleAiming();
     }
 
-    void HandleMovement()
+    /// <summary>
+    ///     Handles input for the camera, including movement and mouse control.
+    /// </summary>
+    void HandleInput()
     {
         Vector3 moveVector = new Vector2(); 
 
@@ -53,21 +58,26 @@ public class CameraController : MonoBehaviour
             moveVector.z -= 1;
         }
 
-        moveVector = moveVector.normalized * Speed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.LeftShift))
-            moveVector *= BoostMult;
-        transform.Translate(Vector3.forward * moveVector.y);
-        transform.Translate(Vector3.right * moveVector.x);
-        transform.Translate(Vector3.up * moveVector.z);
-    }
-
-    void HandleAiming()
-    {
         if (Input.GetMouseButtonDown(1))
         {
             Cursor.lockState = Cursor.lockState == CursorLockMode.None ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
+        moveVector = moveVector.normalized * Speed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.LeftShift))
+            moveVector *= BoostMult;
+
+        transform.Translate(Vector3.forward * moveVector.y);
+        transform.Translate(Vector3.right * moveVector.x);
+        transform.Translate(Vector3.up * moveVector.z);
+    }
+
+    /// <summary>
+    ///     Handles camera aiming and controlling, only allowing the camera to look around while the cursour is locked
+    ///         to the screen.
+    /// </summary>
+    void HandleAiming()
+    {
         if (Cursor.lockState == CursorLockMode.None)
             return;
 
