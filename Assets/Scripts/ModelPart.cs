@@ -3,17 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     Represents an interactable part of the model.
+/// </summary>
 public class ModelPart : MonoBehaviour
 {
-    const float MoveSpeed = 5;
-    bool isActive = false;
-    int curStep = 0;
-    Vector3 moveLocation;
-    Vector3 startLocation;
+    private const float MoveSpeed = 5;
 
+    private bool isActive = false;
+    private int curStep = 0;
+    private Vector3 moveLocation;
+    private Vector3 startLocation;
+
+    /// <summary>
+    ///     Occurs when [action completed].
+    /// </summary>
     public event EventHandler ActionCompleted;
 
+    /// <summary>
+    ///     Gets a value indicating whether this instance is moving.
+    /// </summary>
+    /// <value>
+    ///     <c>true</c> if this instance is moving; otherwise, <c>false</c>.
+    /// </value>
     public bool IsMoving { get; private set; }
+
+    /// <summary>
+    ///     Gets a value indicating whether this instance is active.<br />
+    ///     While active, the part will have a glow to indicate to show that it can be interacted with.
+    /// </summary>
+    /// <value>
+    ///     <c>true</c> if this instance is active; otherwise, <c>false</c>.
+    /// </value>
     public bool IsActive
     {
         get => isActive;
@@ -26,6 +47,11 @@ public class ModelPart : MonoBehaviour
 
     public List<PartState> Steps { get; set; } = new List<PartState>();
 
+    /// <summary>
+    ///     Initializes this instance, setting its start location and initial move location.<br />
+    ///     Must be run after the <c>Awake</c> step, but cannot be used in this instance's <c>Start</c> step.<br />
+    ///     Should be run by the <c>StepController</c> that is holding this object in its <c>Start</c> step.
+    /// </summary>
     public void Initialize()
     {
         startLocation = transform.position;
@@ -49,6 +75,9 @@ public class ModelPart : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     Handles behaviour when interacted with, usually when clicked on with the mouse.
+    /// </summary>
     public void Interact()
     {
         if (!IsActive || IsMoving)
@@ -60,10 +89,17 @@ public class ModelPart : MonoBehaviour
         ActionCompleted?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    ///     Goes to the specified step, playing any animations to reach it.
+    /// </summary>
+    /// <param name="step">The step.</param>
+    /// <exception cref="System.ArgumentOutOfRangeException">step</exception>
     public void GotoStep(int step)
     {
         if (step < 0 || step >= Steps.Count)
-            return;
+        {
+            throw new ArgumentOutOfRangeException(nameof(step));
+        }
 
         Vector3 newPosition = Steps[step].Position;
 
@@ -78,10 +114,17 @@ public class ModelPart : MonoBehaviour
         curStep = step;
     }
 
+    /// <summary>
+    ///     Goes to the specified step instantly without playing any animations.
+    /// </summary>
+    /// <param name="step">The step.</param>
+    /// <exception cref="System.ArgumentOutOfRangeException">step</exception>
     public void GotoStepInstantly(int step)
     {
         if (step < 0 || step >= Steps.Count)
-            return;
+        {
+            throw new ArgumentOutOfRangeException(nameof(step));
+        }
 
         Vector3 newPosition = Steps[step].Position;
         transform.position = startLocation + newPosition;

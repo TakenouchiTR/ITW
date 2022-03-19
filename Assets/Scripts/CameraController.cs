@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     A first person controller for the camera. Allows free movement across all three axes and rotation<br />
+///     across the x and y axes. The camera will move in relation to where the camera is aiming (ie: moving<br />
+///     forward while looking down will move the camera down).<br />
+///     <br />
+///     Camera rotation on the X axis is locked from -90deg to 90deg, preventing the camera from looking "upside down".
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     private const float Speed = 5;
@@ -73,8 +80,8 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    ///     Handles camera aiming and controlling, only allowing the camera to look around while the cursour is locked
-    ///         to the screen.
+    ///     Handles camera aiming and controlling, only allowing the camera to look around while the cursour is locked<br />
+    ///     to the screen.
     /// </summary>
     void HandleAiming()
     {

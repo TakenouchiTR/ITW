@@ -6,16 +6,30 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+///     Text that fires an event when clicked.
+/// </summary>
 public class ClickableText : MonoBehaviour
 {
+    private TextMeshProUGUI text;
+
+    /// <summary>
+    ///     Occurs when a link is clicked. Contains information about the type of command for the link and<br />
+    ///     the additional data needed for the command.
+    /// </summary>
     public UnityEvent<LinkCommand> LinkClicked;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        text = GetComponent<TextMeshProUGUI>();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            var text = GetComponent<TextMeshProUGUI>();
             int linkIndex = TMP_TextUtilities.FindIntersectingLink(text, Input.mousePosition, null);
             if (linkIndex > -1)
             {

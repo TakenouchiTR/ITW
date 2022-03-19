@@ -6,31 +6,83 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    ///     Stores the type of command and the extra data needed to execute it.
+    /// </summary>
     public struct LinkCommand
     {
+        /// <summary>
+        ///     Gets or sets the type of the command. <br />
+        ///     This is what the command will do.
+        /// </summary>
+        /// <value>
+        ///     The type.
+        /// </value>
         public LinkCommandType Type { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the data of the command.<br />
+        ///     This is what information the command needs to execute.
+        /// </summary>
+        /// <value>
+        ///     The data.
+        /// </value>
         public string Data { get; set; }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LinkCommand"/> struct.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="data">The data.</param>
         public LinkCommand(LinkCommandType type, string data)
         {
             Type = type;
             Data = data;
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LinkCommand"/> struct.<br />
+        ///     Attempts to convert the string type into a LinkCommandType.
+        /// </summary>
+        /// <param name="type">The name of the type as a string.</param>
+        /// <param name="data">The data.</param>
+        /// <exception cref="System.ArgumentException">Unable to parse ${type} into a LinkCommandType.</exception>
         public LinkCommand(string type, string data)
         {
-            Type = (LinkCommandType)Enum.Parse(typeof(LinkCommandType), type);
-            Data = data;
+            if (Enum.TryParse(type, out LinkCommandType result))
+            {
+                Type = result;
+                Data = data;
+            }
+            else
+            {
+                throw new ArgumentException($"Unable to parse ${type} into a LinkCommandType.");
+            }
         }
     }
 
+    /// <summary>
+    ///     Represents the finite set of possible commands for links to execute.
+    /// </summary>
     public enum LinkCommandType
     {
-        //JUMP <step: int>
+        /// <summary>
+        ///     Jumps to a specified step.<br />
+        ///     Usage: JUMP &lt;step:int&gt;
+        /// </summary>
         JUMP,
-        //STUT <index: int>,<step: int>
+
+        /// <summary>
+        ///     Opens a specified subtutorial at a given step.<br />
+        ///     Usage: STUT &lt;tutorial_index:int&gt;,&lt;step:int&gt;
+        /// </summary>
         STUT,
-        //RTRN <step: int>
+
+        /// <summary>
+        ///     Closes the current subtutorial and returns to the previous tutorial.<br />
+        ///     Usage: "RTRN "<br />
+        ///     Note: There are two spaces in front of the return.
+        /// </summary>
         RTRN,
     }
 }

@@ -8,8 +8,17 @@ using UnityEngine;
 
 namespace Assets.Scripts.IO
 {
+    /// <summary>
+    ///     Writes tutorial data to a specified file.
+    /// </summary>
     public class TutorialWriter
     {
+        /// <summary>
+        ///     Writes a tutorial file at a specified location. The version of the file is determined by <br />
+        ///     TutorialData's <c>Version</c> constant field.
+        /// </summary>
+        /// <param name="fileLocation">The file location.</param>
+        /// <param name="data">The tutorial data.</param>
         public static void WriteFile(string fileLocation, TutorialData data)
         {
             using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(fileLocation)))

@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+///     Manages the main game screen.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -11,19 +14,35 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     List<GameObject> stepControllerPrefabs;
 
+    /// <summary>
+    ///     Gets the currently active step controller.
+    /// </summary>
+    /// <value>
+    ///     The current step controller.
+    /// </value>
     public StepController CurrentStepController => stepControllers[stepControllers.Count - 1];
 
-    public void Push(int prefabIndex)
+
+    /// <summary>
+    ///     Pushes a new controller onto the stack using its prefab index, hiding the current active controller.
+    /// </summary>
+    /// <param name="prefabIndex">Index of the prefab.</param>
+    public void PushController(int prefabIndex)
     {
-        if (prefabIndex >= stepControllerPrefabs.Count)
+        if (prefabIndex >= stepControllerPrefabs.Count || prefabIndex < 0)
         {
             Debug.LogError("prefabIndex out of range");
             return;
         }
-        Push(Instantiate(stepControllerPrefabs[prefabIndex].GetComponent<StepController>()));
+        PushController(Instantiate(stepControllerPrefabs[prefabIndex].GetComponent<StepController>()));
     }
 
-    public void Push(StepController controller)
+
+    /// <summary>
+    ///     Pushes an already created controller onto the stack, hiding the current active controller.
+    /// </summary>
+    /// <param name="controller">The controller.</param>
+    public void PushController(StepController controller)
     {
         if (stepControllers.Contains(controller))
         {
@@ -35,7 +54,12 @@ public class GameManager : MonoBehaviour
         stepControllers.Add(controller);
     }
 
-    public void Pop()
+
+    /// <summary>
+    ///     Pops the active controller from the top of the stack, destroying it and showing the next<br />
+    ///     controller down the stack.
+    /// </summary>
+    public void PopController()
     {
         if (stepControllers.Count <= 1)
         {
@@ -61,7 +85,6 @@ public class GameManager : MonoBehaviour
 
     public void OnClickableTextLinkedClicked(LinkCommand e)
     {
-
         switch (e.Type)
         {
             case LinkCommandType.JUMP:
@@ -74,15 +97,23 @@ public class GameManager : MonoBehaviour
                 int prefabIndex = int.Parse(subData[0]);
                 int subStep = int.Parse(subData[1]);
 
-                Push(prefabIndex);
+                PushController(prefabIndex);
                 CurrentStepController.GotoStepInstantly(subStep);
                 break;
 
             case LinkCommandType.RTRN:
                 int returnStep = int.Parse(e.Data);
-                Pop();
+                PopController();
 
-                CurrentStepController.GotoStepInstantly(returnStep == -1 ? CurrentStepController.CurrentStep : returnStep);
+                if (returnStep != -1)
+                {
+                    CurrentStepController.GotoStepInstantly(returnStep);
+                }
+                
+                break;
+
+            default:
+                Debug.LogError($"Unknown command ({e.Type})");
                 break;
         }
     }

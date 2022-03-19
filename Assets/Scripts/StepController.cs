@@ -7,35 +7,42 @@ using System;
 using Assets.Scripts;
 using Assets.Scripts.IO;
 
+/// <summary>
+///     Controls the text and animamtions of a tutorial.
+/// </summary>
 public class StepController : MonoBehaviour
 {
-    protected int curStep;
-    protected int totalSteps;
-    protected int totalActions;
-    protected int actionsRemaining;
-    protected bool isActive = true;
+    private int curStep;
+    private int totalSteps;
+    private int totalActions;
+    private int actionsRemaining;
 
-    protected string[] titles;
-    protected string[] instructionTexts;
+    private string[] titles;
+    private string[] instructionTexts;
 
-    TextMeshProUGUI title;
-    TextMeshProUGUI instructions;
-    TextMeshProUGUI txt_actionsRemaining;
-
-    [SerializeField]
-    protected ModelPart[] parts;
+    private TextMeshProUGUI txt_title;
+    private TextMeshProUGUI txt_instructions;
+    private TextMeshProUGUI txt_actionsRemaining;
 
     [SerializeField]
-    string filePath;
+    private ModelPart[] parts;
 
-    protected bool CanStartStep => !parts.Any(p => p.IsMoving);
+    [SerializeField]
+    private string filePath;
 
-    public int CurrentStep => curStep;
+    /// <summary>
+    ///     Gets a value indicating whether this instance can start the next step.<br />
+    ///     An instance is able to start its next step iff all parts are not moving.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if this instance can start its next step; otherwise, <c>false</c>.
+    /// </value>
+    private bool CanStartStep => !parts.Any(p => p.IsMoving);
 
     private void Awake()
     {
-        title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
-        instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
+        txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
+        txt_instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
         txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
         foreach (var part in parts)
         {
@@ -46,12 +53,19 @@ public class StepController : MonoBehaviour
         GotoStepInstantly(0);
     }
 
+    /// <summary>
+    ///     Updates the actions remaining display.
+    /// </summary>
     private void UpdateActionsRemainingDisplay()
     {
         txt_actionsRemaining.text = $"Actions Left: {actionsRemaining}/{totalActions}";
     }
 
-    protected virtual void LoadSteps()
+    /// <summary>
+    ///     Loads the steps from a file. The file must be specified through the editor using<br />
+    ///     the <c>filePath</c> field.
+    /// </summary>
+    private void LoadSteps()
     {
         TutorialData data = TutorialReader.ReadFile(filePath);
 
@@ -65,53 +79,70 @@ public class StepController : MonoBehaviour
         }
     }
 
-    private void StartStep(int step)
+    /// <summary>
+    ///     Goes to a specified step, having the parts play any animations.
+    /// </summary>
+    /// <param name="step">The step.</param>
+    public void GotoStep(int step)
     {
         if (!CanStartStep)
             return;
-        title.text = titles[step];
-        instructions.text = instructionTexts[step];
+
+        curStep = step;
+
+        txt_title.text = titles[step];
+        txt_instructions.text = instructionTexts[step];
+
         foreach (var part in parts)
         {
             part.GotoStep(step);
         }
     }
 
-    public void GotoStep(int step)
-    {
-        if (!CanStartStep)
-            return;
-        curStep = step;
-        StartStep(step);
-    }
-
+    /// <summary>
+    ///     Goes to a specified step, without having the parts play any animations.
+    /// </summary>
+    /// <param name="step">The specified step.</param>
     public void GotoStepInstantly(int step)
     {
         if (!CanStartStep)
             return;
+
         curStep = step;
-        title.text = titles[step];
-        instructions.text = instructionTexts[step];
+
+        txt_title.text = titles[step];
+        txt_instructions.text = instructionTexts[step];
+
         foreach (var part in parts)
         {
             part.GotoStepInstantly(step);
         }
     }
-    
+
+    /// <summary>
+    ///     Goes to the next step, if current step isn't the final step.<br />
+    ///     Allows parts to play their animations to go to the next step.
+    /// </summary>
     public void GotoNextStep()
     {
         if (!CanStartStep)
             return;
+
         curStep = curStep < totalSteps - 1 ? curStep + 1 : curStep;
-        StartStep(curStep);
+        GotoStep(curStep);
     }
 
+    /// <summary>
+    ///     Goes to the previous step, if current step isn't the first step.<br />
+    ///     Allows parts to play their animations to go to the previous step.
+    /// </summary>
     public void GotoPrevStep()
     {
         if (!CanStartStep)
             return;
+
         curStep = curStep == 0 ? 0 : curStep - 1;
-        StartStep(curStep);
+        GotoStep(curStep);
     }
 
     public void OnActionComplete(object sender, EventArgs e)
