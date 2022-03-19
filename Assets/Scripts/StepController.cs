@@ -8,17 +8,15 @@ using Assets.Scripts;
 using Assets.Scripts.IO;
 
 /// <summary>
-///     Controls the text and animamtions of a tutorial.
+///     Controls the text and animations of a tutorial.
 /// </summary>
 public class StepController : MonoBehaviour
 {
     private int curStep;
-    private int totalSteps;
     private int totalActions;
     private int actionsRemaining;
 
-    private string[] titles;
-    private string[] instructionTexts;
+    private StepInformation stepInformation;
 
     private TextMeshProUGUI txt_title;
     private TextMeshProUGUI txt_instructions;
@@ -69,9 +67,7 @@ public class StepController : MonoBehaviour
     {
         TutorialData data = TutorialReader.ReadFile(this.filePath);
 
-        this.titles = data.Titles;
-        this.instructionTexts = data.Instructions;
-        this.totalSteps = this.titles.Length;
+        this.stepInformation = new StepInformation(data.Titles, data.Instructions);
 
         for (int i = 0; i < parts.Length; i++)
         {
@@ -90,8 +86,8 @@ public class StepController : MonoBehaviour
 
         this.curStep = step;
 
-        this.txt_title.text = this.titles[step];
-        this.txt_instructions.text = this.instructionTexts[step];
+        this.txt_title.text = this.stepInformation.Titles[step];
+        this.txt_instructions.text = this.stepInformation.Instructions[step];
 
         foreach (var part in this.parts)
         {
@@ -110,8 +106,8 @@ public class StepController : MonoBehaviour
 
         this.curStep = step;
 
-        this.txt_title.text = this.titles[step];
-        this.txt_instructions.text = this.instructionTexts[step];
+        this.txt_title.text = this.stepInformation.Titles[step];
+        this.txt_instructions.text = this.stepInformation.Instructions[step];
 
         foreach (var part in this.parts)
         {
@@ -128,7 +124,7 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.curStep = this.curStep < this.totalSteps - 1 ? this.curStep + 1 : curStep;
+        this.curStep = this.curStep < this.stepInformation.TotalSteps - 1 ? this.curStep + 1 : curStep;
         this.GotoStep(this.curStep);
     }
 
