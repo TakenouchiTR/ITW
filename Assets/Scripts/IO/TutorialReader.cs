@@ -18,7 +18,7 @@ namespace Assets.Scripts.IO
         /// </summary>
         /// <param name="fileLocation">The file location.</param>
         /// <returns>
-        ///     A TutorialData object containing the file's contents
+        ///     A <see cref="TutorialData" /> object containing the file's contents
         /// </returns>
         /// <exception cref="System.IO.FileNotFoundException">The file {fileLocation} does not exist.</exception>
         public static TutorialData ReadFile(string fileLocation)
@@ -40,6 +40,8 @@ namespace Assets.Scripts.IO
             {
                 case 1:
                     return ReadVersion1(fileLocation);
+                default:
+                    break;
             }
 
             return result;
@@ -50,8 +52,8 @@ namespace Assets.Scripts.IO
         ///     <br />
         ///     Version 1 only contains the titles, instructions, and positions for the part states.
         /// </summary>
-        /// <param name="reader">An open.</param>
-        /// <returns>A TutorialData object containing the file's contents</returns>
+        /// <param name="fileLocation">The file to read.</param>
+        /// <returns>A <see cref="TutorialData"/> object containing the file's contents</returns>
         private static TutorialData ReadVersion1(string fileLocation)
         {
             TutorialData data;
@@ -66,7 +68,7 @@ namespace Assets.Scripts.IO
 
                 string[] titles = new string[stepCount];
                 string[] instructions = new string[stepCount];
-                PartState[][] states = new PartState[partCount][];
+                PartTimeline[] states = new PartTimeline[partCount];
 
                 for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
                 {
@@ -76,13 +78,13 @@ namespace Assets.Scripts.IO
 
                 for (int partIndex = 0; partIndex < partCount; partIndex++)
                 {
-                    states[partIndex] = new PartState[stepCount];
+                    states[partIndex] = new PartTimeline(new PartState[stepCount]);
                     for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
                     {
                         float x = reader.ReadSingle();
                         float y = reader.ReadSingle();
                         float z = reader.ReadSingle();
-                        states[partIndex][stepIndex] = new PartState()
+                        states[partIndex].States[stepIndex] = new PartState()
                         {
                             Position = new Vector3(x, y, z)
                         };

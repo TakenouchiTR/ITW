@@ -37,20 +37,20 @@ public class StepController : MonoBehaviour
     /// <value>
     ///   <c>true</c> if this instance can start its next step; otherwise, <c>false</c>.
     /// </value>
-    private bool CanStartStep => !parts.Any(p => p.IsMoving);
+    private bool CanStartStep => !this.parts.Any(p => p.IsMoving);
 
     private void Awake()
     {
-        txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
-        txt_instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
-        txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
-        foreach (var part in parts)
+        this.txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
+        this.txt_instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
+        this.txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
+        foreach (var part in this.parts)
         {
             part.ActionCompleted += OnActionComplete;
             part.Initialize();
         }
-        LoadSteps();
-        GotoStepInstantly(0);
+        this.LoadSteps();
+        this.GotoStepInstantly(0);
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class StepController : MonoBehaviour
     /// </summary>
     private void UpdateActionsRemainingDisplay()
     {
-        txt_actionsRemaining.text = $"Actions Left: {actionsRemaining}/{totalActions}";
+        this.txt_actionsRemaining.text = $"Actions Left: {this.actionsRemaining}/{this.totalActions}";
     }
 
     /// <summary>
@@ -67,33 +67,33 @@ public class StepController : MonoBehaviour
     /// </summary>
     private void LoadSteps()
     {
-        TutorialData data = TutorialReader.ReadFile(filePath);
+        TutorialData data = TutorialReader.ReadFile(this.filePath);
 
-        titles = data.Titles;
-        instructionTexts = data.Instructions;
-        totalSteps = titles.Length;
+        this.titles = data.Titles;
+        this.instructionTexts = data.Instructions;
+        this.totalSteps = this.titles.Length;
 
         for (int i = 0; i < parts.Length; i++)
         {
-            parts[i].Steps = data.States[i].ToList();
+            this.parts[i].Steps = data.States[i];
         }
     }
 
     /// <summary>
-    ///     Goes to a specified step, having the parts play any animations.
+    ///     Goes to a specified step, having the parts play animations in the process.
     /// </summary>
     /// <param name="step">The step.</param>
     public void GotoStep(int step)
     {
-        if (!CanStartStep)
+        if (!this.CanStartStep)
             return;
 
-        curStep = step;
+        this.curStep = step;
 
-        txt_title.text = titles[step];
-        txt_instructions.text = instructionTexts[step];
+        this.txt_title.text = this.titles[step];
+        this.txt_instructions.text = this.instructionTexts[step];
 
-        foreach (var part in parts)
+        foreach (var part in this.parts)
         {
             part.GotoStep(step);
         }
@@ -105,15 +105,15 @@ public class StepController : MonoBehaviour
     /// <param name="step">The specified step.</param>
     public void GotoStepInstantly(int step)
     {
-        if (!CanStartStep)
+        if (!this.CanStartStep)
             return;
 
-        curStep = step;
+        this.curStep = step;
 
-        txt_title.text = titles[step];
-        txt_instructions.text = instructionTexts[step];
+        this.txt_title.text = this.titles[step];
+        this.txt_instructions.text = this.instructionTexts[step];
 
-        foreach (var part in parts)
+        foreach (var part in this.parts)
         {
             part.GotoStepInstantly(step);
         }
@@ -125,11 +125,11 @@ public class StepController : MonoBehaviour
     /// </summary>
     public void GotoNextStep()
     {
-        if (!CanStartStep)
+        if (!this.CanStartStep)
             return;
 
-        curStep = curStep < totalSteps - 1 ? curStep + 1 : curStep;
-        GotoStep(curStep);
+        this.curStep = this.curStep < this.totalSteps - 1 ? this.curStep + 1 : curStep;
+        this.GotoStep(this.curStep);
     }
 
     /// <summary>
@@ -138,16 +138,16 @@ public class StepController : MonoBehaviour
     /// </summary>
     public void GotoPrevStep()
     {
-        if (!CanStartStep)
+        if (!this.CanStartStep)
             return;
 
-        curStep = curStep == 0 ? 0 : curStep - 1;
-        GotoStep(curStep);
+        this.curStep = this.curStep == 0 ? 0 : this.curStep - 1;
+        this.GotoStep(this.curStep);
     }
 
     public void OnActionComplete(object sender, EventArgs e)
     {
-        actionsRemaining--;
-        UpdateActionsRemainingDisplay();
+        this.actionsRemaining--;
+        this.UpdateActionsRemainingDisplay();
     }
 }

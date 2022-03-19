@@ -22,8 +22,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        xRotation = transform.rotation.eulerAngles.x;
-        yRotation = transform.rotation.eulerAngles.y;
+        this.xRotation = transform.rotation.eulerAngles.x;
+        this.yRotation = transform.rotation.eulerAngles.y;
     }
 
     // Update is called once per frame
@@ -70,7 +70,7 @@ public class CameraController : MonoBehaviour
             Cursor.lockState = Cursor.lockState == CursorLockMode.None ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
-        moveVector = moveVector.normalized * Speed * Time.deltaTime;
+        moveVector = Speed * Time.deltaTime * moveVector.normalized;
         if (Input.GetKey(KeyCode.LeftShift))
             moveVector *= BoostMult;
 
@@ -88,14 +88,14 @@ public class CameraController : MonoBehaviour
         if (Cursor.lockState == CursorLockMode.None)
             return;
 
-        Vector2 mouseVector = new Vector2();
+        Vector2 mouseVector = new Vector2()
+        {
+            x = Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime,
+            y = Input.GetAxis("Mouse Y") * MouseSensitivity * Time.deltaTime,
+        };
 
-        mouseVector.x = Input.GetAxis("Mouse X") * MouseSensitivity * Time.deltaTime;
-        mouseVector.y = Input.GetAxis("Mouse Y") * MouseSensitivity * Time.deltaTime;
-
-
-        xRotation = Mathf.Clamp(xRotation - mouseVector.y, -90, 90);
-        yRotation += mouseVector.x;
+        this.xRotation = Mathf.Clamp(xRotation - mouseVector.y, -90, 90);
+        this.yRotation += mouseVector.x;
 
 
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);

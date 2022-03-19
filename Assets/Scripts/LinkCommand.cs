@@ -36,13 +36,13 @@ namespace Assets.Scripts
         /// <param name="data">The data.</param>
         public LinkCommand(LinkCommandType type, string data)
         {
-            Type = type;
-            Data = data;
+            this.Type = type;
+            this.Data = data;
         }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LinkCommand"/> struct.<br />
-        ///     Attempts to convert the string type into a LinkCommandType.
+        ///     Attempts to convert the string type into a <see cref="LinkCommandType"/>.
         /// </summary>
         /// <param name="type">The name of the type as a string.</param>
         /// <param name="data">The data.</param>
@@ -51,8 +51,8 @@ namespace Assets.Scripts
         {
             if (Enum.TryParse(type, out LinkCommandType result))
             {
-                Type = result;
-                Data = data;
+                this.Type = result;
+                this.Data = data;
             }
             else
             {

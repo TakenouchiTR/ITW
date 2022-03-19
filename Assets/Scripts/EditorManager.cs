@@ -43,7 +43,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The part count.
     /// </value>
-    public int PartCount => partStates.Count;
+    public int PartCount => this.partStates.Count;
 
     /// <summary>
     ///     Gets the step count.
@@ -51,7 +51,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The step count.
     /// </value>
-    public int StepCount => titles.Count;
+    public int StepCount => this.titles.Count;
 
     /// <summary>
     ///     Gets the list of states for the current part.
@@ -59,7 +59,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The list of states for the current part.
     /// </value>
-    public List<PartState> CurrentPartStates => partStates[currentPartIndex];
+    public List<PartState> CurrentPartStates => this.partStates[this.currentPartIndex];
 
     /// <summary>
     ///     Gets state for the current part at the current step.
@@ -67,7 +67,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The state for the current part at the current step.
     /// </value>
-    public PartState CurrentPartState => CurrentPartStates[currentStep];
+    public PartState CurrentPartState => this.CurrentPartStates[this.currentStep];
 
     /// <summary>
     ///     Gets the title of the current state.
@@ -75,7 +75,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The title of the current state.
     /// </value>
-    public string CurrentTitle => titles[currentStep];
+    public string CurrentTitle => this.titles[this.currentStep];
 
     /// <summary>
     ///     Gets the instruction text for the current step.
@@ -83,22 +83,22 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The instruction text for the current step.
     /// </value>
-    public string CurrentInstruction => instructions[currentStep];
+    public string CurrentInstruction => this.instructions[this.currentStep];
 
     void Start()
     {
-        StartNewFile();
+        this.StartNewFile();
     }
 
     void Update()
     {
         if (Input.mouseScrollDelta.y > 0)
         {
-            ChangeStep(currentStep - 1);
+            this.ChangeStep(this.currentStep - 1);
         }
         else if (Input.mouseScrollDelta.y < 0)
         {
-            ChangeStep(currentStep + 1);
+            this.ChangeStep(this.currentStep + 1);
         }
     }
 
@@ -107,17 +107,17 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void StartNewFile()
     {
-        fileLocation = null;
-        titles = new List<string>();
-        instructions = new List<string>();
-        partStates = new List<List<PartState>>();
+        this.fileLocation = null;
+        this.titles = new List<string>();
+        this.instructions = new List<string>();
+        this.partStates = new List<List<PartState>>();
 
-        currentStep = 0;
-        currentPartIndex = 0;
+        this.currentStep = 0;
+        this.currentPartIndex = 0;
 
-        InsertNewStepBeforeCurrentStep();
-        InsertNewPartBeforeCurrentPart();
-        UpdateUI();
+        this.InsertNewStepBeforeCurrentStep();
+        this.InsertNewPartBeforeCurrentPart();
+        this.UpdateUI();
     }
 
     /// <summary>
@@ -125,10 +125,10 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewPartBeforeCurrentPart()
     {
-        partStates.Insert(currentPartIndex, new List<PartState>());
-        while (partStates[currentPartIndex].Count < StepCount)
+        this.partStates.Insert(this.currentPartIndex, new List<PartState>());
+        while (this.partStates[this.currentPartIndex].Count < this.StepCount)
         {
-            partStates[currentPartIndex].Add(new PartState());
+            this.partStates[this.currentPartIndex].Add(new PartState());
         }
     }
 
@@ -137,12 +137,12 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewStepBeforeCurrentStep()
     {
-        titles.Insert(currentStep, "Title");
-        instructions.Insert(currentStep, "Instructions");
+        this.titles.Insert(this.currentStep, "Title");
+        this.instructions.Insert(this.currentStep, "Instructions");
 
-        foreach (List<PartState> states in partStates)
+        foreach (List<PartState> states in this.partStates)
         {
-            states.Insert(currentStep, new PartState());
+            states.Insert(this.currentStep, new PartState());
         }
     }
 
@@ -151,12 +151,12 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewStepAfterCurrentStep()
     {
-        titles.Insert(currentStep + 1, "Title");
-        instructions.Insert(currentStep + 1, "Instructions");
+        this.titles.Insert(this.currentStep + 1, "Title");
+        this.instructions.Insert(this.currentStep + 1, "Instructions");
 
-        foreach (List<PartState> states in partStates)
+        foreach (List<PartState> states in this.partStates)
         {
-            states.Insert(currentStep + 1, new PartState());
+            states.Insert(this.currentStep + 1, new PartState());
         }
     }
 
@@ -165,10 +165,10 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewPartAfterCurrentPart()
     {
-        partStates.Insert(currentPartIndex + 1, new List<PartState>());
-        while (partStates[currentPartIndex + 1].Count < StepCount)
+        this.partStates.Insert(this.currentPartIndex + 1, new List<PartState>());
+        while (this.partStates[this.currentPartIndex + 1].Count < this.StepCount)
         {
-            partStates[currentPartIndex + 1].Add(new PartState());
+            this.partStates[this.currentPartIndex + 1].Add(new PartState());
         }
     }
 
@@ -177,15 +177,15 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void UpdateUI()
     {
-        txt_TotalParts.text = "/ " + PartCount;
-        txt_TotalSteps.text = "/ " + StepCount;
-        inp_CurrentPart.text = (currentPartIndex + 1).ToString();
-        inp_CurrentStep.text = (currentStep + 1).ToString();
-        inp_Title.text = CurrentTitle;
-        inp_Instructions.text = CurrentInstruction;
-        inp_PosX.text = CurrentPartState.Position.x.ToString();
-        inp_PosY.text = CurrentPartState.Position.y.ToString();
-        inp_PosZ.text = CurrentPartState.Position.z.ToString();
+        this.txt_TotalParts.text = "/ " + this.PartCount;
+        this.txt_TotalSteps.text = "/ " + this.StepCount;
+        this.inp_CurrentPart.text = (this.currentPartIndex + 1).ToString();
+        this.inp_CurrentStep.text = (this.currentStep + 1).ToString();
+        this.inp_Title.text = this.CurrentTitle;
+        this.inp_Instructions.text = this.CurrentInstruction;
+        this.inp_PosX.text = this.CurrentPartState.Position.x.ToString();
+        this.inp_PosY.text = this.CurrentPartState.Position.y.ToString();
+        this.inp_PosZ.text = this.CurrentPartState.Position.z.ToString();
     }
 
     /// <summary>
@@ -194,10 +194,10 @@ public class EditorManager : MonoBehaviour
     /// <param name="step">The new step.</param>
     void ChangeStep(int step)
     {
-        if (step >= 0 && step < StepCount)
+        if (step >= 0 && step < this.StepCount)
         {
-            currentStep = step;
-            UpdateUI();
+            this.currentStep = step;
+            this.UpdateUI();
         }
     }
 
@@ -207,10 +207,10 @@ public class EditorManager : MonoBehaviour
     /// <param name="part">The part index.</param>
     void ChangePart(int part)
     {
-        if (part >= 0 && part < PartCount)
+        if (part >= 0 && part < this.PartCount)
         {
-            currentPartIndex = part;
-            UpdateUI();
+            this.currentPartIndex = part;
+            this.UpdateUI();
         }
     }
 
@@ -223,14 +223,14 @@ public class EditorManager : MonoBehaviour
     /// <param name="index">The index to remove.</param>
     void RemoveStep(int index)
     {
-        if (StepCount > 1 && index >= 0 && index < StepCount)
+        if (this.StepCount > 1 && index >= 0 && index < this.StepCount)
         {
-            titles.RemoveAt(index);
-            instructions.RemoveAt(index);
+            this.titles.RemoveAt(index);
+            this.instructions.RemoveAt(index);
 
-            if (currentStep >= StepCount)
+            if (this.currentStep >= this.StepCount)
             {
-                currentStep = StepCount - 1;
+                this.currentStep = this.StepCount - 1;
             }
         }
     }
@@ -244,33 +244,33 @@ public class EditorManager : MonoBehaviour
     /// <param name="index">The index.</param>
     void RemovePart(int index)
     {
-        if (PartCount > 1 && index >= 0 && index < PartCount)
+        if (this.PartCount > 1 && index >= 0 && index < this.PartCount)
         {
-            partStates.RemoveAt(index);
+            this.partStates.RemoveAt(index);
         }
 
-        if (currentPartIndex >= PartCount)
+        if (this.currentPartIndex >= this.PartCount)
         {
-            currentPartIndex = PartCount - 1;
+            this.currentPartIndex = this.PartCount - 1;
         }
     }
 
     /// <summary>
     ///     Creates a file-writable save data object from the current values of the editor.
     /// </summary>
-    /// <returns>A TutorialData object that may be saved to a file.</returns>
+    /// <returns>A <see cref="TutorialData"/> object that may be saved to a file.</returns>
     TutorialData CreateSaveData()
     {
-        PartState[][] states = new PartState[PartCount][];
-        for (int i = 0; i < PartCount; i++)
+        PartTimeline[] states = new PartTimeline[this.PartCount];
+        for (int i = 0; i < this.PartCount; i++)
         {
-            states[i] = partStates[i].ToArray();
+            states[i] = new PartTimeline(this.partStates[i].ToArray());
         }
 
         TutorialData data = new TutorialData()
         {
-            Titles = titles.ToArray(),
-            Instructions = instructions.ToArray(),
+            Titles = this.titles.ToArray(),
+            Instructions = this.instructions.ToArray(),
             States = states
         };
 
@@ -280,121 +280,121 @@ public class EditorManager : MonoBehaviour
     /// <summary>
     ///     Displays the file browser to select a save location. If one is selected, the tutorial will be saved.
     /// </summary>
-    /// <returns>The IEnumerator for running the coroutine.</returns>
+    /// <returns>The <see cref="IEnumerator"/> for running the coroutine.</returns>
     IEnumerator SaveFileCoroutine()
     {
         yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, null, "Select File");
 
         if (FileBrowser.Success)
         {
-            fileLocation = FileBrowser.Result[0];
-            TutorialWriter.WriteFile(fileLocation, CreateSaveData());
+            this.fileLocation = FileBrowser.Result[0];
+            TutorialWriter.WriteFile(this.fileLocation, this.CreateSaveData());
         }
     }
 
     /// <summary>
     ///     Displays the file browser to select a file to load. If one is selected, the file will be loaded.
     /// </summary>
-    /// <returns>The IEnumerator for running the coroutine.</returns>
+    /// <returns>The <see cref="IEnumerator"/> for running the coroutine.</returns>
     IEnumerator LoadFileCoroutine()
     {
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Select File");
 
         if (FileBrowser.Success)
         {
-            currentPartIndex = 0;
-            currentStep = 0;
-            fileLocation = FileBrowser.Result[0];
-            TutorialData data = TutorialReader.ReadFile(fileLocation);
+            this.currentPartIndex = 0;
+            this.currentStep = 0;
+            this.fileLocation = FileBrowser.Result[0];
+            TutorialData data = TutorialReader.ReadFile(this.fileLocation);
 
-            titles = data.Titles.ToList();
-            instructions = data.Instructions.ToList();
-            partStates = new List<List<PartState>>();
+            this.titles = data.Titles.ToList();
+            this.instructions = data.Instructions.ToList();
+            this.partStates = new List<List<PartState>>();
 
             for (int i = 0; i < data.PartCount; i++)
             {
-                partStates.Add(data.States[i].ToList());
+                this.partStates.Add(data.States[i].States.ToList());
             }
-            UpdateUI();
+            this.UpdateUI();
         }
     }
 
     public void OnAddNewStepClicked()
     {
-        InsertNewStepAfterCurrentStep();
-        ChangeStep(currentStep + 1);
+        this.InsertNewStepAfterCurrentStep();
+        this.ChangeStep(this.currentStep + 1);
     }
 
     public void OnAddNewPartClicked()
     {
-        InsertNewPartAfterCurrentPart();
-        ChangePart(currentPartIndex + 1);
+        this.InsertNewPartAfterCurrentPart();
+        this.ChangePart(this.currentPartIndex + 1);
     }
 
     public void OnRemovePartClicked()
     {
-        RemovePart(currentPartIndex);
-        UpdateUI();
+        this.RemovePart(this.currentPartIndex);
+        this.UpdateUI();
     }
 
     public void OnRemoveStepClicked()
     {
-        RemoveStep(currentStep);
-        UpdateUI();
+        this.RemoveStep(this.currentStep);
+        this.UpdateUI();
     }
 
     public void OnInsertStepClicked()
     {
-        InsertNewStepBeforeCurrentStep();
-        UpdateUI();
+        this.InsertNewStepBeforeCurrentStep();
+        this.UpdateUI();
     }
 
     public void OnInsertPartClicked()
     {
-        InsertNewPartBeforeCurrentPart();
-        UpdateUI();
+        this.InsertNewPartBeforeCurrentPart();
+        this.UpdateUI();
     }
 
     public void OnSaveClicked()
     {
-        if (fileLocation == null)
+        if (this.fileLocation == null)
         {
-            StartCoroutine(SaveFileCoroutine());
+            this.StartCoroutine(this.SaveFileCoroutine());
         }
         else
         {
-            TutorialWriter.WriteFile(fileLocation, CreateSaveData());
+            TutorialWriter.WriteFile(this.fileLocation, this.CreateSaveData());
         }
     }
 
     public void OnSaveAsClicked()
     {
-        StartCoroutine(SaveFileCoroutine());
+        this.StartCoroutine(this.SaveFileCoroutine());
     }
 
     public void OnLoadClicked()
     {
-        StartCoroutine(LoadFileCoroutine());
+        this.StartCoroutine(this.LoadFileCoroutine());
     }
 
     public void OnCopyPositionForwardClicked()
     {
-        if (currentStep < StepCount - 1)
+        if (this.currentStep < this.StepCount - 1)
         {
-            CurrentPartStates[currentStep + 1].Position = CurrentPartState.Position;
+            this.CurrentPartStates[this.currentStep + 1].Position = this.CurrentPartState.Position;
         }
     }
 
     public void OnNewClicked()
     {
-        StartNewFile();
+        this.StartNewFile();
     }
 
     public void OnStepEditEnd(string text)
     {
         if (int.TryParse(text, out int index))
         {
-            ChangeStep(index - 1);
+            this.ChangeStep(index - 1);
         }
     }
 
@@ -402,27 +402,27 @@ public class EditorManager : MonoBehaviour
     {
         if (int.TryParse(text, out int index))
         {
-            ChangePart(index - 1);
+            this.ChangePart(index - 1);
         }
 
-        UpdateUI();
+        this.UpdateUI();
     }
 
     public void OnTitleEditEnd(string text)
     {
-        titles[currentStep] = text;
+        this.titles[this.currentStep] = text;
     }
 
     public void OnInstructionsEditEnd(string text)
     {
-        instructions[currentStep] = text;
+        this.instructions[this.currentStep] = text;
     }
 
     public void OnPositionEndEdit()
     {
-        float x = float.Parse(inp_PosX.text);
-        float y = float.Parse(inp_PosY.text);
-        float z = float.Parse(inp_PosZ.text);
-        CurrentPartState.Position = new Vector3(x, y, z);
+        float x = float.Parse(this.inp_PosX.text);
+        float y = float.Parse(this.inp_PosY.text);
+        float z = float.Parse(this.inp_PosZ.text);
+        this.CurrentPartState.Position = new Vector3(x, y, z);
     }
 }

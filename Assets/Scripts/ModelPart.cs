@@ -37,25 +37,25 @@ public class ModelPart : MonoBehaviour
     /// </value>
     public bool IsActive
     {
-        get => isActive;
+        get => this.isActive;
         private set
         {               
-            isActive = value;
-            GetComponent<Renderer>().material.SetFloat("_Intensity", isActive ? 1 : 0);
+            this.isActive = value;
+            GetComponent<Renderer>().material.SetFloat("_Intensity", this.isActive ? 1 : 0);
         }
     }
 
-    public List<PartState> Steps { get; set; } = new List<PartState>();
+    public PartTimeline Steps { get; set; } = new PartTimeline();
 
     /// <summary>
     ///     Initializes this instance, setting its start location and initial move location.<br />
     ///     Must be run after the <c>Awake</c> step, but cannot be used in this instance's <c>Start</c> step.<br />
-    ///     Should be run by the <c>StepController</c> that is holding this object in its <c>Start</c> step.
+    ///     Should be run by the <see cref="StepController"/> that is holding this object in its <c>Start</c> step.
     /// </summary>
     public void Initialize()
     {
-        startLocation = transform.position;
-        moveLocation = startLocation;
+        this.startLocation = transform.position;
+        this.moveLocation = this.startLocation;
     }
 
     // Update is called once per frame
@@ -64,13 +64,13 @@ public class ModelPart : MonoBehaviour
         if (IsMoving)
         {
             float step = MoveSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, moveLocation, step);
-            IsMoving = transform.position != moveLocation;
+            transform.position = Vector3.MoveTowards(transform.position, this.moveLocation, step);
+            this.IsMoving = transform.position != moveLocation;
 
-            if (!IsMoving && curStep < Steps.Count - 1)
+            if (!this.IsMoving && this.curStep < this.Steps.Count - 1)
             {
-                IsActive = moveLocation != startLocation + Steps[curStep + 1].Position;
-                moveLocation = Steps[curStep + 1].Position;
+                this.IsActive = this.moveLocation != this.startLocation + this.Steps[this.curStep + 1].Position;
+                this.moveLocation = this.Steps[this.curStep + 1].Position;
             }
         }
     }
@@ -80,13 +80,13 @@ public class ModelPart : MonoBehaviour
     /// </summary>
     public void Interact()
     {
-        if (!IsActive || IsMoving)
+        if (!this.IsActive || this.IsMoving)
             return;
 
-        IsActive = false;
-        IsMoving = true;
-        moveLocation = curStep < Steps.Count - 1 ? startLocation + Steps[curStep + 1].Position : moveLocation;
-        ActionCompleted?.Invoke(this, EventArgs.Empty);
+        this.IsActive = false;
+        this.IsMoving = true;
+        this.moveLocation = this.curStep < this.Steps.Count - 1 ? this.startLocation + this.Steps[this.curStep + 1].Position : this.moveLocation;
+        this.ActionCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -96,22 +96,22 @@ public class ModelPart : MonoBehaviour
     /// <exception cref="System.ArgumentOutOfRangeException">step</exception>
     public void GotoStep(int step)
     {
-        if (step < 0 || step >= Steps.Count)
+        if (step < 0 || step >= this.Steps.Count)
         {
             throw new ArgumentOutOfRangeException(nameof(step));
         }
 
-        Vector3 newPosition = Steps[step].Position;
+        Vector3 newPosition = this.Steps[step].Position;
 
         //Moves if the part isn't in place for the step
-        IsMoving = moveLocation != startLocation + newPosition;
+        this.IsMoving = this.moveLocation != this.startLocation + newPosition;
 
         //Sets the next move location
-        moveLocation = startLocation + newPosition;
+        this.moveLocation = this.startLocation + newPosition;
 
         //Makes the part active if it is not at where it needs to be in the NEXT step
-        IsActive = step < Steps.Count - 1 && Steps[step + 1].Position != newPosition;
-        curStep = step;
+        this.IsActive = step < this.Steps.Count - 1 && this.Steps[step + 1].Position != newPosition;
+        this.curStep = step;
     }
 
     /// <summary>
@@ -121,24 +121,24 @@ public class ModelPart : MonoBehaviour
     /// <exception cref="System.ArgumentOutOfRangeException">step</exception>
     public void GotoStepInstantly(int step)
     {
-        if (step < 0 || step >= Steps.Count)
+        if (step < 0 || step >= this.Steps.Count)
         {
             throw new ArgumentOutOfRangeException(nameof(step));
         }
 
-        Vector3 newPosition = Steps[step].Position;
+        Vector3 newPosition = this.Steps[step].Position;
         transform.position = startLocation + newPosition;
 
-        IsActive = step < Steps.Count - 1 && Steps[step + 1].Position != newPosition;
-        IsMoving = false;
-        curStep = step;
+        this.IsActive = step < this.Steps.Count - 1 && this.Steps[step + 1].Position != newPosition;
+        this.IsMoving = false;
+        this.curStep = step;
     }
 
     private void OnMouseDown()
     {
-        if (!isActive || IsMoving)
+        if (!this.isActive || this.IsMoving)
             return;
 
-        Interact();
+        this.Interact();
     }
 }

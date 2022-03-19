@@ -22,7 +22,7 @@ public class ClickableText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text = GetComponent<TextMeshProUGUI>();
+        this.text = GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -34,10 +34,12 @@ public class ClickableText : MonoBehaviour
             if (linkIndex > -1)
             {
                 TMP_LinkInfo linkInfo = text.textInfo.linkInfo[linkIndex];
+
                 string linkId = linkInfo.GetLinkID();
                 string linkCode = linkId.Substring(0, 4);
                 string linkData = linkId.Substring(5);
-                LinkClicked?.Invoke(new LinkCommand(linkCode, linkData));
+
+                this.LinkClicked?.Invoke(new LinkCommand(linkCode, linkData));
             }
         }
     }

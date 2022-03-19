@@ -9,10 +9,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    List<StepController> stepControllers;
+    private List<StepController> stepControllers;
 
     [SerializeField]
-    List<GameObject> stepControllerPrefabs;
+    private List<GameObject> stepControllerPrefabs;
 
     /// <summary>
     ///     Gets the currently active step controller.
@@ -20,38 +20,38 @@ public class GameManager : MonoBehaviour
     /// <value>
     ///     The current step controller.
     /// </value>
-    public StepController CurrentStepController => stepControllers[stepControllers.Count - 1];
+    public StepController CurrentStepController => this.stepControllers[this.stepControllers.Count - 1];
 
 
     /// <summary>
-    ///     Pushes a new controller onto the stack using its prefab index, hiding the current active controller.
+    ///     Pushes a new <see cref="StepController"/> onto the stack using its prefab index, hiding the current active controller.
     /// </summary>
     /// <param name="prefabIndex">Index of the prefab.</param>
     public void PushController(int prefabIndex)
     {
-        if (prefabIndex >= stepControllerPrefabs.Count || prefabIndex < 0)
+        if (prefabIndex >= this.stepControllerPrefabs.Count || prefabIndex < 0)
         {
             Debug.LogError("prefabIndex out of range");
             return;
         }
-        PushController(Instantiate(stepControllerPrefabs[prefabIndex].GetComponent<StepController>()));
+        this.PushController(Instantiate(this.stepControllerPrefabs[prefabIndex].GetComponent<StepController>()));
     }
 
 
     /// <summary>
-    ///     Pushes an already created controller onto the stack, hiding the current active controller.
+    ///     Pushes an already created <see cref="StepController"/> onto the stack, hiding the current active controller.
     /// </summary>
     /// <param name="controller">The controller.</param>
     public void PushController(StepController controller)
     {
-        if (stepControllers.Contains(controller))
+        if (this.stepControllers.Contains(controller))
         {
             Debug.LogError("controller already added");
             return;
         }
 
-        CurrentStepController.gameObject.SetActive(false);
-        stepControllers.Add(controller);
+        this.CurrentStepController.gameObject.SetActive(false);
+        this.stepControllers.Add(controller);
     }
 
 
@@ -61,26 +61,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PopController()
     {
-        if (stepControllers.Count <= 1)
+        if (this.stepControllers.Count <= 1)
         {
             Debug.LogError("can't remove last prefab controller");
             return;
         }
 
-        StepController prevStepController = CurrentStepController;
-        stepControllers.RemoveAt(stepControllers.Count - 1);
-        CurrentStepController.gameObject.SetActive(true);
+        StepController prevStepController = this.CurrentStepController;
+        this.stepControllers.RemoveAt(this.stepControllers.Count - 1);
+        this.CurrentStepController.gameObject.SetActive(true);
         Destroy(prevStepController.gameObject);
     }
     
     public void OnNextClicked()
     {
-        CurrentStepController.GotoNextStep();
+        this.CurrentStepController.GotoNextStep();
     }
 
     public void OnPrevClicked()
     {
-        CurrentStepController.GotoPrevStep();
+        this.CurrentStepController.GotoPrevStep();
     }
 
     public void OnClickableTextLinkedClicked(LinkCommand e)
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
         {
             case LinkCommandType.JUMP:
                 int stepNumber = int.Parse(e.Data);
-                CurrentStepController.GotoStep(stepNumber);
+                this.CurrentStepController.GotoStep(stepNumber);
                 break;
 
             case LinkCommandType.STUT:
@@ -97,17 +97,17 @@ public class GameManager : MonoBehaviour
                 int prefabIndex = int.Parse(subData[0]);
                 int subStep = int.Parse(subData[1]);
 
-                PushController(prefabIndex);
-                CurrentStepController.GotoStepInstantly(subStep);
+                this.PushController(prefabIndex);
+                this.CurrentStepController.GotoStepInstantly(subStep);
                 break;
 
             case LinkCommandType.RTRN:
                 int returnStep = int.Parse(e.Data);
-                PopController();
+                this.PopController();
 
                 if (returnStep != -1)
                 {
-                    CurrentStepController.GotoStepInstantly(returnStep);
+                    this.CurrentStepController.GotoStepInstantly(returnStep);
                 }
                 
                 break;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Assets.Scripts.IO
 {
 
@@ -13,7 +8,7 @@ namespace Assets.Scripts.IO
     public struct TutorialData
     {
         /// <summary>
-        ///     The current file version
+        ///     The current file version.
         /// </summary>
         public const int Version = 1;
 
@@ -37,13 +32,12 @@ namespace Assets.Scripts.IO
         public string[] Instructions { get; set; }
 
         /// <summary>
-        ///     Gets or sets the states for each parts at each step. Each row represents a part, while<br />
-        ///     the indices in the row represent its state for a given step.
+        ///     Gets or sets the <see cref="PartTimeline"/> for each part at each step.
         /// </summary>
         /// <value>
         ///     The states.
         /// </value>
-        public PartState[][] States { get; set; }
+        public PartTimeline[] States { get; set; }
 
         /// <summary>
         ///     Gets the total number of steps.
