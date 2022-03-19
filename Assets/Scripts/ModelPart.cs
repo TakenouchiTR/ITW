@@ -136,7 +136,7 @@ public class ModelPart : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!this.isActive || this.IsMoving)
+        if (!this.isActive || this.IsMoving || Cursor.lockState == CursorLockMode.Locked)
             return;
 
         this.Interact();
