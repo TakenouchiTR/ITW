@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
         this.stepControllers.Add(controller);
     }
 
-
     /// <summary>
     ///     Pops the active controller from the top of the stack, destroying it and showing the next<br />
     ///     controller down the stack.
@@ -105,11 +104,11 @@ public class GameManager : MonoBehaviour
                 int returnStep = int.Parse(e.Data);
                 this.PopController();
 
-                if (returnStep != -1)
+                if (returnStep == -1)
                 {
-                    this.CurrentStepController.GotoStepInstantly(returnStep);
+                    returnStep = this.CurrentStepController.CurrentStep;
                 }
-                
+                this.CurrentStepController.GotoStepInstantly(returnStep);
                 break;
 
             default:

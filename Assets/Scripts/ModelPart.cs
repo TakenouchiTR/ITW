@@ -9,11 +9,17 @@ using UnityEngine;
 public class ModelPart : MonoBehaviour
 {
     private const float MoveSpeed = 5;
+    private const float ArrowAppearDelay = 5;
 
     private bool isActive = false;
     private int curStep = 0;
     private Vector3 moveLocation;
     private Vector3 startLocation;
+    private Arrow arrow;
+    private float arrowAppearTimer;
+
+    [SerializeField]
+    private Arrow arrowPrefab;
 
     /// <summary>
     ///     Occurs when [action completed].
@@ -41,7 +47,8 @@ public class ModelPart : MonoBehaviour
         private set
         {               
             this.isActive = value;
-            GetComponent<Renderer>().material.SetFloat("_Intensity", this.isActive ? 1 : 0);
+            base.GetComponent<Renderer>().material.SetFloat("_Intensity", this.isActive ? 1 : 0);
+
         }
     }
 
@@ -56,6 +63,15 @@ public class ModelPart : MonoBehaviour
     {
         this.startLocation = transform.position;
         this.moveLocation = this.startLocation;
+        this.arrowAppearTimer = ArrowAppearDelay;
+
+        if (this.arrowPrefab != null)
+        {
+            Arrow arrow = Instantiate(this.arrowPrefab);
+            this.arrow = arrow;
+            arrow.Target = base.gameObject;
+            arrow.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -73,6 +89,30 @@ public class ModelPart : MonoBehaviour
                 this.moveLocation = this.Steps[this.curStep + 1].Position;
             }
         }
+        else if (this.IsActive && this.arrow != null && this.arrowAppearTimer > 0)
+        {
+            this.arrowAppearTimer -= Time.deltaTime;
+            if (arrowAppearTimer <= 0)
+            {
+                this.arrow.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    void OnEnable()
+    {
+        if (this.arrow != null && this.arrowAppearTimer <= 0)
+        {
+            this.arrow.gameObject.SetActive(true);
+        }
+    }
+
+    void OnDisable()
+    {
+        if (this.arrow != null)
+        {
+            this.arrow.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -87,6 +127,7 @@ public class ModelPart : MonoBehaviour
         this.IsMoving = true;
         this.moveLocation = this.curStep < this.Steps.Count - 1 ? this.startLocation + this.Steps[this.curStep + 1].Position : this.moveLocation;
         this.ActionCompleted?.Invoke(this, EventArgs.Empty);
+        this.ResetArrow();
     }
 
     /// <summary>
@@ -112,6 +153,8 @@ public class ModelPart : MonoBehaviour
         //Makes the part active if it is not at where it needs to be in the NEXT step
         this.IsActive = step < this.Steps.Count - 1 && this.Steps[step + 1].Position != newPosition;
         this.curStep = step;
+
+        this.ResetArrow();
     }
 
     /// <summary>
@@ -132,6 +175,17 @@ public class ModelPart : MonoBehaviour
         this.IsActive = step < this.Steps.Count - 1 && this.Steps[step + 1].Position != newPosition;
         this.IsMoving = false;
         this.curStep = step;
+
+        this.ResetArrow();
+    }
+
+    private void ResetArrow()
+    {
+        if (this.arrow != null)
+        {
+            this.arrow.gameObject.SetActive(false);
+            this.arrowAppearTimer = ArrowAppearDelay;
+        }
     }
 
     private void OnMouseDown()

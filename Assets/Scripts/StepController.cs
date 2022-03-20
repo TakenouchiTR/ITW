@@ -28,6 +28,12 @@ public class StepController : MonoBehaviour
     [SerializeField]
     private string filePath;
 
+    public int CurrentStep
+    {
+        get => curStep;
+        private set => curStep = value;
+    }
+
     /// <summary>
     ///     Gets a value indicating whether this instance can start the next step.<br />
     ///     An instance is able to start its next step iff all parts are not moving.
@@ -84,7 +90,7 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.curStep = step;
+        this.CurrentStep = step;
 
         this.txt_title.text = this.stepInformation.Titles[step];
         this.txt_instructions.text = this.stepInformation.Instructions[step];
@@ -104,7 +110,7 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.curStep = step;
+        this.CurrentStep = step;
 
         this.txt_title.text = this.stepInformation.Titles[step];
         this.txt_instructions.text = this.stepInformation.Instructions[step];

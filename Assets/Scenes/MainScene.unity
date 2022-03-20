@@ -2257,6 +2257,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3402495292725999117, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: arrowPrefab
+      value: 
+      objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
+    - target: {fileID: 3402495292840963895, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: arrowPrefab
+      value: 
+      objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
     - target: {fileID: 3402495293114836193, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -2317,5 +2325,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: StepController
       objectReference: {fileID: 0}
+    - target: {fileID: 3402495293330064911, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: arrowPrefab
+      value: 
+      objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
+    - target: {fileID: 3402495294493305339, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: arrowPrefab
+      value: 
+      objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
+    - target: {fileID: 3402495294650324099, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: arrowPrefab
+      value: 
+      objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
