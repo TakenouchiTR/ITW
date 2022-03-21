@@ -49,4 +49,30 @@ public struct StepInformation
         this.Titles = titles;
         this.Instructions = instructions;
     }
+
+    /// <summary>
+    ///     Generates the table of contents.
+    /// </summary>
+    /// <returns>An array of <see cref="TOCEntry"/> representing the table of contents.</returns>
+    public TOCEntry[] GenerateTableOfContents()
+    {
+        List<TOCEntry> entries = new List<TOCEntry>();
+
+        if (this.TotalSteps == 0)
+        {
+            return entries.ToArray();
+        }
+
+        entries.Add(new TOCEntry(Titles[0], 0));
+
+        for (int i = 1; i < TotalSteps; i++)
+        {
+            if (Titles[i] != entries[entries.Count - 1].Text)
+            {
+                entries.Add(new TOCEntry(Titles[i], i));
+            }
+        }
+
+        return entries.ToArray();
+    }
 }

@@ -18,10 +18,13 @@ public class CameraController : MonoBehaviour
     private float xRotation = 0;
     private float yRotation = 0;
 
+    public bool Controllable { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        this.Controllable = true;
         this.xRotation = transform.rotation.eulerAngles.x;
         this.yRotation = transform.rotation.eulerAngles.y;
     }
@@ -29,6 +32,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!this.Controllable)
+        {
+            return;
+        }
+
         HandleInput();
         HandleAiming();
     }

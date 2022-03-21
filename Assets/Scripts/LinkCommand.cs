@@ -73,6 +73,12 @@ namespace Assets.Scripts
         JUMP,
 
         /// <summary>
+        ///     Jumps immediately to a specified step.<br />
+        ///     Usage: JUMP &lt;step:int&gt;
+        /// </summary>
+        IJMP,
+
+        /// <summary>
         ///     Opens a specified subtutorial at a given step.<br />
         ///     Usage: STUT &lt;tutorial_index:int&gt;,&lt;step:int&gt;
         /// </summary>
@@ -80,8 +86,8 @@ namespace Assets.Scripts
 
         /// <summary>
         ///     Closes the current subtutorial and returns to the previous tutorial.<br />
-        ///     Usage: "RTRN "<br />
-        ///     Note: There are two spaces in front of the return.
+        ///     Usage: "RTRN &lt;step:int&gt"<br />
+        ///     A step of -1 will pick up where the previous tutorial left off.
         /// </summary>
         RTRN,
     }

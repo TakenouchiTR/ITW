@@ -28,11 +28,25 @@ public class StepController : MonoBehaviour
     [SerializeField]
     private string filePath;
 
+    /// <summary>
+    ///     Gets the current step.
+    /// </summary>
+    /// <value>
+    ///     The current step.
+    /// </value>
     public int CurrentStep
     {
         get => curStep;
         private set => curStep = value;
     }
+
+    /// <summary>
+    ///     Gets the table of contents entries.
+    /// </summary>
+    /// <value>
+    ///     The table of contents entries.
+    /// </value>
+    public TOCEntry[] TableOfContentsEntries => this.stepInformation.GenerateTableOfContents();
 
     /// <summary>
     ///     Gets a value indicating whether this instance can start the next step.<br />

@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///     Manages the main game screen.
@@ -14,6 +15,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> stepControllerPrefabs;
 
+    [SerializeField]
+    private TableOfContents tableOfContents;
+
     /// <summary>
     ///     Gets the currently active step controller.
     /// </summary>
@@ -22,6 +26,10 @@ public class GameManager : MonoBehaviour
     /// </value>
     public StepController CurrentStepController => this.stepControllers[this.stepControllers.Count - 1];
 
+    void Start()
+    {
+        this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
+    }
 
     /// <summary>
     ///     Pushes a new <see cref="StepController"/> onto the stack using its prefab index, hiding the current active controller.
@@ -37,7 +45,6 @@ public class GameManager : MonoBehaviour
         this.PushController(Instantiate(this.stepControllerPrefabs[prefabIndex].GetComponent<StepController>()));
     }
 
-
     /// <summary>
     ///     Pushes an already created <see cref="StepController"/> onto the stack, hiding the current active controller.
     /// </summary>
@@ -52,6 +59,7 @@ public class GameManager : MonoBehaviour
 
         this.CurrentStepController.gameObject.SetActive(false);
         this.stepControllers.Add(controller);
+        this.tableOfContents.SetTableContents(controller.TableOfContentsEntries);
     }
 
     /// <summary>
@@ -70,6 +78,7 @@ public class GameManager : MonoBehaviour
         this.stepControllers.RemoveAt(this.stepControllers.Count - 1);
         this.CurrentStepController.gameObject.SetActive(true);
         Destroy(prevStepController.gameObject);
+        this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
     }
     
     public void OnNextClicked()
@@ -82,13 +91,24 @@ public class GameManager : MonoBehaviour
         this.CurrentStepController.GotoPrevStep();
     }
 
+    public void OnTableOfContentsClicked()
+    {
+
+    }
+
     public void OnClickableTextLinkedClicked(LinkCommand e)
     {
+        int stepNumber;
         switch (e.Type)
         {
             case LinkCommandType.JUMP:
-                int stepNumber = int.Parse(e.Data);
+                stepNumber = int.Parse(e.Data);
                 this.CurrentStepController.GotoStep(stepNumber);
+                break;
+
+            case LinkCommandType.IJMP:
+                stepNumber = int.Parse(e.Data);
+                this.CurrentStepController.GotoStepInstantly(stepNumber);
                 break;
 
             case LinkCommandType.STUT:
