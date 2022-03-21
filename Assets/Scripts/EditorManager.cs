@@ -14,9 +14,8 @@ public class EditorManager : MonoBehaviour
     private int currentPartIndex = 0;
     private int currentStep = 0;
     private string fileLocation;
-    private List<string> titles;
-    private List<string> instructions;
-    private List<List<PartState>> partStates;
+    private List<StepInformation> stepInformation;
+    private List<PartTimeline> partTimelines;
 
     [SerializeField]
     private TextMeshProUGUI txt_TotalSteps;
@@ -29,7 +28,11 @@ public class EditorManager : MonoBehaviour
     [SerializeField]
     private TMP_InputField inp_Title;
     [SerializeField]
+    private TMP_InputField inp_Subtitle;
+    [SerializeField]
     private TMP_InputField inp_Instructions;
+    [SerializeField]
+    private TMP_InputField inp_PartName;
     [SerializeField]
     private TMP_InputField inp_PosX;
     [SerializeField]
@@ -43,7 +46,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The part count.
     /// </value>
-    public int PartCount => this.partStates.Count;
+    public int PartCount => this.partTimelines.Count;
 
     /// <summary>
     ///     Gets the step count.
@@ -51,7 +54,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The step count.
     /// </value>
-    public int StepCount => this.titles.Count;
+    public int StepCount => this.stepInformation.Count;
 
     /// <summary>
     ///     Gets the list of states for the current part.
@@ -59,7 +62,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The list of states for the current part.
     /// </value>
-    public List<PartState> CurrentPartStates => this.partStates[this.currentPartIndex];
+    public PartTimeline CurrentPartTimeline => this.partTimelines[this.currentPartIndex];
 
     /// <summary>
     ///     Gets state for the current part at the current step.
@@ -67,7 +70,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The state for the current part at the current step.
     /// </value>
-    public PartState CurrentPartState => this.CurrentPartStates[this.currentStep];
+    public PartState CurrentPartState => this.CurrentPartTimeline[this.currentStep];
 
     /// <summary>
     ///     Gets the title of the current state.
@@ -75,7 +78,15 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The title of the current state.
     /// </value>
-    public string CurrentTitle => this.titles[this.currentStep];
+    public string CurrentTitle => this.stepInformation[this.currentStep].Title;
+
+    /// <summary>
+    ///     Gets the subtitle of the current state.
+    /// </summary>
+    /// <value>
+    ///     The subtitle of the current state.
+    /// </value>
+    public string CurrentSubtitle => this.stepInformation[this.currentStep].Subtitle;
 
     /// <summary>
     ///     Gets the instruction text for the current step.
@@ -83,7 +94,7 @@ public class EditorManager : MonoBehaviour
     /// <value>
     ///     The instruction text for the current step.
     /// </value>
-    public string CurrentInstruction => this.instructions[this.currentStep];
+    public string CurrentInstruction => this.stepInformation[this.currentStep].Instructions;
 
     void Start()
     {
@@ -108,9 +119,8 @@ public class EditorManager : MonoBehaviour
     void StartNewFile()
     {
         this.fileLocation = null;
-        this.titles = new List<string>();
-        this.instructions = new List<string>();
-        this.partStates = new List<List<PartState>>();
+        this.stepInformation = new List<StepInformation>();
+        this.partTimelines = new List<PartTimeline>();
 
         this.currentStep = 0;
         this.currentPartIndex = 0;
@@ -125,10 +135,10 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewPartBeforeCurrentPart()
     {
-        this.partStates.Insert(this.currentPartIndex, new List<PartState>());
-        while (this.partStates[this.currentPartIndex].Count < this.StepCount)
+        this.partTimelines.Insert(this.currentPartIndex, new PartTimeline(new List<PartState>()));
+        while (this.partTimelines[this.currentPartIndex].Count < this.StepCount)
         {
-            this.partStates[this.currentPartIndex].Add(new PartState());
+            this.partTimelines[this.currentPartIndex].States.Add(new PartState());
         }
     }
 
@@ -137,12 +147,11 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewStepBeforeCurrentStep()
     {
-        this.titles.Insert(this.currentStep, "Title");
-        this.instructions.Insert(this.currentStep, "Instructions");
+        this.stepInformation.Insert(this.currentStep, new StepInformation());
 
-        foreach (List<PartState> states in this.partStates)
+        foreach (PartTimeline timeline in this.partTimelines)
         {
-            states.Insert(this.currentStep, new PartState());
+            timeline.States.Insert(this.currentStep, new PartState());
         }
     }
 
@@ -151,12 +160,11 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewStepAfterCurrentStep()
     {
-        this.titles.Insert(this.currentStep + 1, "Title");
-        this.instructions.Insert(this.currentStep + 1, "Instructions");
+        this.stepInformation.Insert(this.currentStep + 1, new StepInformation());
 
-        foreach (List<PartState> states in this.partStates)
+        foreach (PartTimeline timeline in this.partTimelines)
         {
-            states.Insert(this.currentStep + 1, new PartState());
+            timeline.States.Insert(this.currentStep + 1, new PartState());
         }
     }
 
@@ -165,10 +173,10 @@ public class EditorManager : MonoBehaviour
     /// </summary>
     void InsertNewPartAfterCurrentPart()
     {
-        this.partStates.Insert(this.currentPartIndex + 1, new List<PartState>());
-        while (this.partStates[this.currentPartIndex + 1].Count < this.StepCount)
+        this.partTimelines.Insert(this.currentPartIndex + 1, new PartTimeline(new List<PartState>()));
+        while (this.partTimelines[this.currentPartIndex + 1].Count < this.StepCount)
         {
-            this.partStates[this.currentPartIndex + 1].Add(new PartState());
+            this.partTimelines[this.currentPartIndex + 1].States.Add(new PartState());
         }
     }
 
@@ -182,7 +190,9 @@ public class EditorManager : MonoBehaviour
         this.inp_CurrentPart.text = (this.currentPartIndex + 1).ToString();
         this.inp_CurrentStep.text = (this.currentStep + 1).ToString();
         this.inp_Title.text = this.CurrentTitle;
+        this.inp_Subtitle.text = this.CurrentSubtitle;
         this.inp_Instructions.text = this.CurrentInstruction;
+        this.inp_PartName.text = this.CurrentPartTimeline.PartName;
         this.inp_PosX.text = this.CurrentPartState.Position.x.ToString();
         this.inp_PosY.text = this.CurrentPartState.Position.y.ToString();
         this.inp_PosZ.text = this.CurrentPartState.Position.z.ToString();
@@ -225,8 +235,7 @@ public class EditorManager : MonoBehaviour
     {
         if (this.StepCount > 1 && index >= 0 && index < this.StepCount)
         {
-            this.titles.RemoveAt(index);
-            this.instructions.RemoveAt(index);
+            this.stepInformation.RemoveAt(index);
 
             if (this.currentStep >= this.StepCount)
             {
@@ -246,7 +255,7 @@ public class EditorManager : MonoBehaviour
     {
         if (this.PartCount > 1 && index >= 0 && index < this.PartCount)
         {
-            this.partStates.RemoveAt(index);
+            this.partTimelines.RemoveAt(index);
         }
 
         if (this.currentPartIndex >= this.PartCount)
@@ -261,17 +270,10 @@ public class EditorManager : MonoBehaviour
     /// <returns>A <see cref="TutorialData"/> object that may be saved to a file.</returns>
     TutorialData CreateSaveData()
     {
-        PartTimeline[] states = new PartTimeline[this.PartCount];
-        for (int i = 0; i < this.PartCount; i++)
-        {
-            states[i] = new PartTimeline(this.partStates[i].ToArray());
-        }
-
         TutorialData data = new TutorialData()
         {
-            Titles = this.titles.ToArray(),
-            Instructions = this.instructions.ToArray(),
-            States = states
+            StepInformation = this.stepInformation.ToArray(),
+            States = this.partTimelines.ToArray(),
         };
 
         return data;
@@ -307,14 +309,9 @@ public class EditorManager : MonoBehaviour
             this.fileLocation = FileBrowser.Result[0];
             TutorialData data = TutorialReader.ReadFile(this.fileLocation);
 
-            this.titles = data.Titles.ToList();
-            this.instructions = data.Instructions.ToList();
-            this.partStates = new List<List<PartState>>();
+            this.stepInformation = data.StepInformation.ToList();
+            this.partTimelines = data.States.ToList();
 
-            for (int i = 0; i < data.PartCount; i++)
-            {
-                this.partStates.Add(data.States[i].States.ToList());
-            }
             this.UpdateUI();
         }
     }
@@ -381,7 +378,7 @@ public class EditorManager : MonoBehaviour
     {
         if (this.currentStep < this.StepCount - 1)
         {
-            this.CurrentPartStates[this.currentStep + 1].Position = this.CurrentPartState.Position;
+            this.CurrentPartTimeline[this.currentStep + 1].Position = this.CurrentPartState.Position;
         }
     }
 
@@ -410,12 +407,30 @@ public class EditorManager : MonoBehaviour
 
     public void OnTitleEditEnd(string text)
     {
-        this.titles[this.currentStep] = text;
+        StepInformation info = this.stepInformation[this.currentStep];
+        info.Title = text;
+        this.stepInformation[this.currentStep] = info;
+    }
+
+    public void OnSubtitleEditEnd(string text)
+    {
+        StepInformation info = this.stepInformation[this.currentStep];
+        info.Subtitle = text;
+        this.stepInformation[this.currentStep] = info;
     }
 
     public void OnInstructionsEditEnd(string text)
     {
-        this.instructions[this.currentStep] = text;
+        StepInformation info = this.stepInformation[this.currentStep];
+        info.Instructions = text;
+        this.stepInformation[this.currentStep] = info;
+    }
+
+    public void OnPartNameEditEnd(string text)
+    {
+        PartTimeline timeline = this.CurrentPartTimeline;
+        timeline.PartName = text;
+        this.partTimelines[this.currentPartIndex] = timeline;
     }
 
     public void OnPositionEndEdit()

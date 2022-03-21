@@ -40,6 +40,8 @@ namespace Assets.Scripts.IO
             {
                 case 1:
                     return ReadVersion1(fileLocation);
+                case 2:
+                    return ReadVersion2(fileLocation);
                 default:
                     break;
             }
@@ -66,35 +68,92 @@ namespace Assets.Scripts.IO
                 int stepCount = reader.ReadInt32();
                 int partCount = reader.ReadInt32();
 
-                string[] titles = new string[stepCount];
-                string[] instructions = new string[stepCount];
+                StepInformation[] stepInformation = new StepInformation[stepCount];
                 PartTimeline[] states = new PartTimeline[partCount];
 
                 for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
                 {
-                    titles[stepIndex] = reader.ReadString();
-                    instructions[stepIndex] = reader.ReadString();
+                    string title = reader.ReadString();
+                    string instructions = reader.ReadString();
+                    stepInformation[stepIndex] = new StepInformation(title, "", instructions);
                 }
 
                 for (int partIndex = 0; partIndex < partCount; partIndex++)
                 {
-                    states[partIndex] = new PartTimeline(new PartState[stepCount]);
+                    states[partIndex] = new PartTimeline(new List<PartState>());
                     for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
                     {
                         float x = reader.ReadSingle();
                         float y = reader.ReadSingle();
                         float z = reader.ReadSingle();
-                        states[partIndex].States[stepIndex] = new PartState()
+                        states[partIndex].States.Add(new PartState()
                         {
                             Position = new Vector3(x, y, z)
-                        };
+                        });
                     }
                 }
 
                 data = new TutorialData()
                 {
-                    Titles = titles,
-                    Instructions = instructions,
+                    StepInformation = stepInformation,
+                    States = states
+                };
+            }
+
+
+            return data;
+        }
+
+
+        /// <summary>
+        ///     Reads files using version 2 of the file format.<br />
+        ///     <br />
+        ///     Version 2 contains the titles, subtitles, instructions, part names, and positions for the part states.
+        /// </summary>
+        /// <param name="fileLocation">The file to read.</param>
+        /// <returns>A <see cref="TutorialData"/> object containing the file's contents</returns>
+        private static TutorialData ReadVersion2(string fileLocation)
+        {
+            TutorialData data;
+
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(fileLocation)))
+            {
+                //Read and discard the version
+                reader.ReadInt32();
+
+                int stepCount = reader.ReadInt32();
+                int partCount = reader.ReadInt32();
+
+                StepInformation[] stepInformation = new StepInformation[stepCount];
+                PartTimeline[] states = new PartTimeline[partCount];
+
+                for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
+                {
+                    string title = reader.ReadString();
+                    string subtitle = reader.ReadString();
+                    string instructions = reader.ReadString();
+                    stepInformation[stepIndex] = new StepInformation(title, subtitle, instructions);
+                }
+
+                for (int partIndex = 0; partIndex < partCount; partIndex++)
+                {
+                    states[partIndex] = new PartTimeline(new List<PartState>());
+                    states[partIndex].PartName = reader.ReadString();
+                    for (int stepIndex = 0; stepIndex < stepCount; stepIndex++)
+                    {
+                        float x = reader.ReadSingle();
+                        float y = reader.ReadSingle();
+                        float z = reader.ReadSingle();
+                        states[partIndex].States.Add(new PartState()
+                        {
+                            Position = new Vector3(x, y, z)
+                        });
+                    }
+                }
+
+                data = new TutorialData()
+                {
+                    StepInformation = stepInformation,
                     States = states
                 };
             }

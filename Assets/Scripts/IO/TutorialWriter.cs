@@ -29,12 +29,14 @@ namespace Assets.Scripts.IO
 
             for (int i = 0; i < data.StepCount; i++)
             {
-                writer.Write(data.Titles[i]);
-                writer.Write(data.Instructions[i]);
+                writer.Write(data.StepInformation[i].Title);
+                writer.Write(data.StepInformation[i].Subtitle);
+                writer.Write(data.StepInformation[i].Instructions);
             }
 
             for (int partIndex = 0; partIndex < data.PartCount; partIndex++)
             {
+                writer.Write(data.States[partIndex].PartName);
                 for (int stepIndex = 0; stepIndex < data.StepCount; stepIndex++)
                 {
                     Vector3 position = data.States[partIndex][stepIndex].Position;

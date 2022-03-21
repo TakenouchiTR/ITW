@@ -16,7 +16,7 @@ public class StepController : MonoBehaviour
     private int totalActions;
     private int actionsRemaining;
 
-    private StepInformation stepInformation;
+    private TutorialData tutorialData;
 
     private TextMeshProUGUI txt_title;
     private TextMeshProUGUI txt_instructions;
@@ -46,7 +46,7 @@ public class StepController : MonoBehaviour
     /// <value>
     ///     The table of contents entries.
     /// </value>
-    public TOCEntry[] TableOfContentsEntries => this.stepInformation.GenerateTableOfContents();
+    public TOCEntry[] TableOfContentsEntries => this.tutorialData.GenerateTableOfContents();
 
     /// <summary>
     ///     Gets a value indicating whether this instance can start the next step.<br />
@@ -85,14 +85,7 @@ public class StepController : MonoBehaviour
     /// </summary>
     private void LoadSteps()
     {
-        TutorialData data = TutorialReader.ReadFile(this.filePath);
-
-        this.stepInformation = new StepInformation(data.Titles, data.Instructions);
-
-        for (int i = 0; i < parts.Length; i++)
-        {
-            this.parts[i].Steps = data.States[i];
-        }
+        this.tutorialData = TutorialReader.ReadFile(this.filePath);
     }
 
     /// <summary>
@@ -105,9 +98,7 @@ public class StepController : MonoBehaviour
             return;
 
         this.CurrentStep = step;
-
-        this.txt_title.text = this.stepInformation.Titles[step];
-        this.txt_instructions.text = this.stepInformation.Instructions[step];
+        this.UpdateText(this.tutorialData.StepInformation[step]);
 
         foreach (var part in this.parts)
         {
@@ -125,14 +116,18 @@ public class StepController : MonoBehaviour
             return;
 
         this.CurrentStep = step;
-
-        this.txt_title.text = this.stepInformation.Titles[step];
-        this.txt_instructions.text = this.stepInformation.Instructions[step];
+        this.UpdateText(this.tutorialData.StepInformation[step]);
 
         foreach (var part in this.parts)
         {
             part.GotoStepInstantly(step);
         }
+    }
+
+    private void UpdateText(StepInformation information)
+    {
+        this.txt_title.text = information.Title;
+        this.txt_instructions.text = information.Subtitle;
     }
 
     /// <summary>
@@ -144,7 +139,7 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.curStep = this.curStep < this.stepInformation.TotalSteps - 1 ? this.curStep + 1 : curStep;
+        this.curStep = this.curStep < this.tutorialData.StepCount - 1 ? this.curStep + 1 : curStep;
         this.GotoStep(this.curStep);
     }
 

@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Assets.Scripts.IO
 {
 
@@ -10,26 +12,15 @@ namespace Assets.Scripts.IO
         /// <summary>
         ///     The current file version.
         /// </summary>
-        public const int Version = 1;
+        public const int Version = 2;
 
         /// <summary>
-        ///     Gets or sets the titles. Each title is the text displayed at the top of the screen<br />
-        ///     for each step
+        ///     Gets or sets the step information.
         /// </summary>
         /// <value>
-        ///     The titles.
+        ///     The step information.
         /// </value>
-        public string[] Titles { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the instructions. Each instruction is displayed at the bottom of the<br />
-        ///     screen for each step. Instructions may contain clickable, linked text that perform<br />
-        ///     actions during the tutorial when clicked.
-        /// </summary>
-        /// <value>
-        ///     The instructions.
-        /// </value>
-        public string[] Instructions { get; set; }
+        public StepInformation[] StepInformation { get; set; }
 
         /// <summary>
         ///     Gets or sets the <see cref="PartTimeline"/> for each part at each step.
@@ -45,7 +36,7 @@ namespace Assets.Scripts.IO
         /// <value>
         ///     The number of steps.
         /// </value>
-        public int StepCount => Titles.Length;
+        public int StepCount => StepInformation.Length;
 
         /// <summary>
         ///     Gets the part count.
@@ -54,5 +45,31 @@ namespace Assets.Scripts.IO
         ///     The part count.
         /// </value>
         public int PartCount => States.Length;
+
+        /// <summary>
+        ///     Generates the table of contents.
+        /// </summary>
+        /// <returns>An array of <see cref="TOCEntry"/> representing the table of contents.</returns>
+        public TOCEntry[] GenerateTableOfContents()
+        {
+            List<TOCEntry> entries = new List<TOCEntry>();
+
+            if (this.StepCount == 0)
+            {
+                return entries.ToArray();
+            }
+
+            entries.Add(new TOCEntry(StepInformation[0].Title, 0));
+
+            for (int i = 1; i < this.StepCount; i++)
+            {
+                if (StepInformation[i].Title != entries[entries.Count - 1].Text)
+                {
+                    entries.Add(new TOCEntry(StepInformation[i].Title, i));
+                }
+            }
+
+            return entries.ToArray();
+        }
     }
 }

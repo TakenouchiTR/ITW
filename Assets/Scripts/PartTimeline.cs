@@ -8,12 +8,20 @@ using UnityEngine;
 public struct PartTimeline
 {
     /// <summary>
+    ///     Gets or sets the name of the part.
+    /// </summary>
+    /// <value>
+    ///     The name of the part.
+    /// </value>
+    public string PartName { get; set; }
+
+    /// <summary>
     ///     Gets the part states.
     /// </summary>
     /// <value>
     ///     The part states.
     /// </value>
-    public PartState[] States { get; set; }
+    public List<PartState> States { get; set; }
 
     /// <summary>
     ///     Gets the count.
@@ -21,7 +29,7 @@ public struct PartTimeline
     /// <value>
     ///     The count.
     /// </value>
-    public int Count => this.States.Length;
+    public int Count => this.States.Count;
     
     /// <summary>
     ///     Gets or sets the <see cref="PartState"/> at the specified index.
@@ -38,11 +46,13 @@ public struct PartTimeline
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="PartTimeline"/> struct.
+    ///     Initializes a new instance of the <see cref="PartTimeline" /> struct.
     /// </summary>
     /// <param name="states">The part states.</param>
-    public PartTimeline(PartState[] states)
+    /// <param name="partName">Name of the part.</param>
+    public PartTimeline(List<PartState> states, string partName = "")
     {
         this.States = states;
+        this.PartName = partName;
     }
 }

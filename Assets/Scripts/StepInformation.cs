@@ -4,33 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///     Stores information about a given step, including the title and instructions.
+///     Stores information about a given step, including the title, subtitle, and instructions.
 /// </summary>
-public struct StepInformation
+public class StepInformation
 {
     /// <summary>
-    ///     Gets or sets the titles.
+    ///     Gets or sets the title.
     /// </summary>
     /// <value>
-    ///     The titles.
+    ///     The title.
     /// </value>
-    public string[] Titles { get; set; }
+    public string Title { get; set; }
 
     /// <summary>
-    ///     Gets or sets the instructions.
+    ///     Gets or sets the subtitle.
     /// </summary>
     /// <value>
-    ///     The instructions.
+    ///     The subtitle.
     /// </value>
-    public string[] Instructions { get; set; }
+    public string Subtitle { get; set; }
 
     /// <summary>
-    ///     Gets the total steps.
+    ///     Gets or sets the instruction.
     /// </summary>
     /// <value>
-    ///     The total steps.
+    ///     The instruction.
     /// </value>
-    public int TotalSteps => Titles.Length;
+    public string Instructions { get; set; }
+
+    public StepInformation()
+    {
+        this.Title = "";
+        this.Subtitle = "";
+        this.Instructions = "";
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="StepInformation"/> struct.<br/>
@@ -38,41 +45,10 @@ public struct StepInformation
     /// </summary>
     /// <param name="titles">The titles.</param>
     /// <param name="instructions">The instructions.</param>
-    /// <exception cref="System.ArgumentException">titles and instructions must have the same length</exception>
-    public StepInformation(string[] titles, string[] instructions)
+    public StepInformation(string title, string subtitle, string instructions)
     {
-        if (titles.Length != instructions.Length)
-        {
-            throw new ArgumentException("titles and instructions must have the same length");
-        }
-
-        this.Titles = titles;
+        this.Title = title;
+        this.Subtitle = subtitle;
         this.Instructions = instructions;
-    }
-
-    /// <summary>
-    ///     Generates the table of contents.
-    /// </summary>
-    /// <returns>An array of <see cref="TOCEntry"/> representing the table of contents.</returns>
-    public TOCEntry[] GenerateTableOfContents()
-    {
-        List<TOCEntry> entries = new List<TOCEntry>();
-
-        if (this.TotalSteps == 0)
-        {
-            return entries.ToArray();
-        }
-
-        entries.Add(new TOCEntry(Titles[0], 0));
-
-        for (int i = 1; i < TotalSteps; i++)
-        {
-            if (Titles[i] != entries[entries.Count - 1].Text)
-            {
-                entries.Add(new TOCEntry(Titles[i], i));
-            }
-        }
-
-        return entries.ToArray();
     }
 }
