@@ -23,10 +23,19 @@ public struct TOCEntry
     /// </value>
     public int Index { get; set; }
 
-    public TOCEntry(string text, int index)
+    /// <summary>
+    ///     Gets or sets the depth in the table of contents.
+    /// </summary>
+    /// <value>
+    ///     The depth.
+    /// </value>
+    public int Depth { get; set; }
+
+    public TOCEntry(string text, int index, int depth = 0)
     {
         this.Text = text;
         this.Index = index;
+        this.Depth = depth;
     }
 
     public override string ToString()
