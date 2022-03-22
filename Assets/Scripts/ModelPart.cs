@@ -52,6 +52,12 @@ public class ModelPart : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///     Gets or sets the timeline of steps.
+    /// </summary>
+    /// <value>
+    ///     The steps.
+    /// </value>
     public PartTimeline Steps { get; set; } = new PartTimeline();
 
     /// <summary>

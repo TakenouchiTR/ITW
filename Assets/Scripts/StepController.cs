@@ -86,6 +86,10 @@ public class StepController : MonoBehaviour
     private void LoadSteps()
     {
         this.tutorialData = TutorialReader.ReadFile(this.filePath);
+        for (int i = 0; i < tutorialData.PartCount; i++)
+        {
+            this.parts[i].Steps = tutorialData.States[i];
+        }
     }
 
     /// <summary>
@@ -127,7 +131,7 @@ public class StepController : MonoBehaviour
     private void UpdateText(StepInformation information)
     {
         this.txt_title.text = information.Title;
-        this.txt_instructions.text = information.Subtitle;
+        this.txt_instructions.text = information.Instructions;
     }
 
     /// <summary>

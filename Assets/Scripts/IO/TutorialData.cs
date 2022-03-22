@@ -54,18 +54,20 @@ namespace Assets.Scripts.IO
         {
             List<TOCEntry> entries = new List<TOCEntry>();
 
-            if (this.StepCount == 0)
-            {
-                return entries.ToArray();
-            }
+            string lastTitle = "";
+            string lastSubtitle = "";
 
-            entries.Add(new TOCEntry(StepInformation[0].Title, 0));
-
-            for (int i = 1; i < this.StepCount; i++)
+            for (int i = 0; i < this.StepCount; i++)
             {
-                if (StepInformation[i].Title != entries[entries.Count - 1].Text)
+                if (this.StepInformation[i].Title != lastTitle)
                 {
-                    entries.Add(new TOCEntry(StepInformation[i].Title, i));
+                    lastTitle = this.StepInformation[i].Title;
+                    entries.Add(new TOCEntry(lastTitle, i));
+                }
+                if (this.StepInformation[i].Subtitle != string.Empty && this.StepInformation[i].Subtitle != lastSubtitle)
+                {
+                    lastSubtitle = this.StepInformation[i].Subtitle;
+                    entries.Add(new TOCEntry(lastSubtitle, i, 1));
                 }
             }
 

@@ -21,7 +21,19 @@ public class TableOfContents : MonoBehaviour
         this.txt_tableOfContents.text = "";
         foreach (TOCEntry entry in entries)
         {
+            for (int i = 0; i < entry.Depth; i++)
+            {
+                this.txt_tableOfContents.text += "    ";
+            }
+            if (entry.Depth > 0)
+            {
+                this.txt_tableOfContents.text += $"<size={100 - 30 * entry.Depth}%>";
+            }
             this.txt_tableOfContents.text += $"<link=\"IJMP {entry.Index}>{entry.Text}</link>\n";
+            if (entry.Depth > 0)
+            {
+                this.txt_tableOfContents.text += $"</size>";
+            }
         }
     }
 

@@ -52,7 +52,7 @@ public struct PartTimeline
     /// <param name="partName">Name of the part.</param>
     public PartTimeline(List<PartState> states, string partName = "")
     {
-        this.States = states;
+        this.States = states ?? new List<PartState>();
         this.PartName = partName;
     }
 }
