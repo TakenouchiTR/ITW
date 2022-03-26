@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 ///     Stores information about a given step, including the title, subtitle, and instructions.
 /// </summary>
@@ -32,11 +27,32 @@ public class StepInformation
     /// </value>
     public string Instructions { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the name of the audio file that should play when the step is loaded.
+    /// </summary>
+    /// <value>
+    ///     The name of the audio file.
+    /// </value>
+    public string AudioFileName { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the message to be displayed when the step is loaded.
+    /// </summary>
+    /// <value>
+    ///     The message.
+    /// </value>
+    public Message Message { get; set; }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="StepInformation"/> class.
+    /// </summary>
     public StepInformation()
     {
         this.Title = "";
         this.Subtitle = "";
         this.Instructions = "";
+        this.AudioFileName = "";
+        this.Message = new Message();
     }
 
     /// <summary>
@@ -50,5 +66,7 @@ public class StepInformation
         this.Title = title;
         this.Subtitle = subtitle;
         this.Instructions = instructions;
+        this.AudioFileName = "";
+        this.Message = new Message();
     }
 }

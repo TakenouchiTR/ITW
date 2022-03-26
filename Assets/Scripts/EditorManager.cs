@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///     Manages information for the file editor.
@@ -29,6 +30,16 @@ public class EditorManager : MonoBehaviour
     private TMP_InputField inp_Title;
     [SerializeField]
     private TMP_InputField inp_Subtitle;
+    [SerializeField]
+    private TMP_InputField inp_AudioClip;
+    [SerializeField]
+    private TMP_InputField inp_Message;
+    [SerializeField]
+    private Toggle tog_Message;
+    [SerializeField]
+    private Toggle tog_Alert;
+    [SerializeField]
+    private Toggle tog_Warning;
     [SerializeField]
     private TMP_InputField inp_Instructions;
     [SerializeField]
@@ -95,6 +106,14 @@ public class EditorManager : MonoBehaviour
     ///     The instruction text for the current step.
     /// </value>
     public string CurrentInstruction => this.stepInformation[this.currentStep].Instructions;
+
+    /// <summary>
+    ///     Gets the current step information.
+    /// </summary>
+    /// <value>
+    ///     The current step information.
+    /// </value>
+    public StepInformation CurrentStepInformation => this.stepInformation[this.currentStep];
 
     void Start()
     {
@@ -191,11 +210,26 @@ public class EditorManager : MonoBehaviour
         this.inp_CurrentStep.text = (this.currentStep + 1).ToString();
         this.inp_Title.text = this.CurrentTitle;
         this.inp_Subtitle.text = this.CurrentSubtitle;
+        this.inp_AudioClip.text = this.CurrentStepInformation.AudioFileName;
+        this.inp_Message.text = this.CurrentStepInformation.Message.Text;
         this.inp_Instructions.text = this.CurrentInstruction;
         this.inp_PartName.text = this.CurrentPartTimeline.PartName;
         this.inp_PosX.text = this.CurrentPartState.Position.x.ToString();
         this.inp_PosY.text = this.CurrentPartState.Position.y.ToString();
         this.inp_PosZ.text = this.CurrentPartState.Position.z.ToString();
+
+        switch (this.CurrentStepInformation.Message.Type)
+        {
+            case MessageType.Message:
+                tog_Message.isOn = true;
+                break;
+            case MessageType.Alert:
+                tog_Alert.isOn = true;
+                break;
+            case MessageType.Warning:
+                tog_Warning.isOn = true;
+                break;
+        }
     }
 
     /// <summary>
@@ -419,6 +453,13 @@ public class EditorManager : MonoBehaviour
         this.stepInformation[this.currentStep] = info;
     }
 
+    public void OnAudioClipEditEnd(string text)
+    {
+        StepInformation info = this.stepInformation[this.currentStep];
+        info.AudioFileName = text;
+        this.stepInformation[this.currentStep] = info;
+    }
+
     public void OnInstructionsEditEnd(string text)
     {
         StepInformation info = this.stepInformation[this.currentStep];
@@ -431,6 +472,22 @@ public class EditorManager : MonoBehaviour
         PartTimeline timeline = this.CurrentPartTimeline;
         timeline.PartName = text;
         this.partTimelines[this.currentPartIndex] = timeline;
+    }
+
+    public void OnMessageEditEnd(string text)
+    {
+        StepInformation stepInfo = this.CurrentStepInformation;
+        Message message = stepInfo.Message;
+        message.Text = text;
+        stepInfo.Message = message;
+    }
+
+    public void OnMessageTypeToggleClicked(int index)
+    {
+        StepInformation stepInfo = this.CurrentStepInformation;
+        Message message = stepInfo.Message;
+        message.Type = (MessageType) index;
+        stepInfo.Message = message;
     }
 
     public void OnPositionEndEdit()

@@ -9,6 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private AudioSource audioSource;
+
     [SerializeField]
     private List<StepController> stepControllers;
 
@@ -28,7 +30,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        this.audioSource = base.gameObject.AddComponent<AudioSource>();
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
+        this.StartCoroutine(this.PlayAudioCoroutine("Sax Lick.wav"));
     }
 
     /// <summary>
@@ -80,7 +84,18 @@ public class GameManager : MonoBehaviour
         Destroy(prevStepController.gameObject);
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
     }
-    
+
+    IEnumerator PlayAudioCoroutine(string fileName)
+    {
+        string filePath = $"file://{Application.streamingAssetsPath}/Audio/{fileName}";
+        Debug.Log(filePath);
+        WWW request = new WWW(filePath);
+        yield return request;
+
+        this.audioSource.clip = request.GetAudioClip();
+        this.audioSource.Play();
+    }
+
     public void OnNextClicked()
     {
         this.CurrentStepController.GotoNextStep();

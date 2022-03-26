@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.IO
 {
-
     /// <summary>
     ///     Stores data about a tutorial for saving and loading files.
     /// </summary>
@@ -12,7 +11,7 @@ namespace Assets.Scripts.IO
         /// <summary>
         ///     The current file version.
         /// </summary>
-        public const int Version = 2;
+        public const int Version = 3;
 
         /// <summary>
         ///     Gets or sets the step information.

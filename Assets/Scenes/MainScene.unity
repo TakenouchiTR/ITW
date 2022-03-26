@@ -400,13 +400,13 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 599042767}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 705507996}
+        m_TargetAssemblyTypeName: Sun, Assembly-CSharp
+        m_MethodName: Rotate
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -805,11 +805,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424681370}
   m_CullTransparentMesh: 1
---- !u!1 &599042767 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2592242288649782414, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
-  m_PrefabInstance: {fileID: 3402495294004187921}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &634953318
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,6 +951,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -1039,6 +1035,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1009283471a3d4399bfe31c664a225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &707605214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3361,6 +3369,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 632016065278933243, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dc2f67516bef0254192310148eb7b610, type: 2}
     - target: {fileID: 3402495292725999117, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: arrowPrefab
       value: 
@@ -3441,5 +3453,17 @@ PrefabInstance:
       propertyPath: arrowPrefab
       value: 
       objectReference: {fileID: 7890247404847896477, guid: 546ca6624d4c6f44cbb67b90aefa2917, type: 3}
+    - target: {fileID: 4038394156498045943, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dc2f67516bef0254192310148eb7b610, type: 2}
+    - target: {fileID: 4285332266267132952, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dc2f67516bef0254192310148eb7b610, type: 2}
+    - target: {fileID: 5174978148154854985, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dc2f67516bef0254192310148eb7b610, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}

@@ -31,6 +31,9 @@ namespace Assets.Scripts.IO
             {
                 writer.Write(data.StepInformation[i].Title);
                 writer.Write(data.StepInformation[i].Subtitle);
+                writer.Write(data.StepInformation[i].AudioFileName);
+                writer.Write(data.StepInformation[i].Message.Text);
+                writer.Write((int)data.StepInformation[i].Message.Type);
                 writer.Write(data.StepInformation[i].Instructions);
             }
 
