@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     private AudioSource audioSource;
 
     [SerializeField]
+    private MessageBar messageBar;
+
+    [SerializeField]
     private List<StepController> stepControllers;
 
     [SerializeField]
@@ -30,9 +33,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        this.audioSource = base.gameObject.AddComponent<AudioSource>();
+        this.messageBar.gameObject.SetActive(false);
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
-        this.StartCoroutine(this.PlayAudioCoroutine("Sax Lick.wav"));
     }
 
     /// <summary>

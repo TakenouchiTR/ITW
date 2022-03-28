@@ -18,6 +18,7 @@ public class StepController : MonoBehaviour
 
     private TutorialData tutorialData;
 
+    private MessageBar messageBar;
     private TextMeshProUGUI txt_title;
     private TextMeshProUGUI txt_instructions;
     private TextMeshProUGUI txt_actionsRemaining;
@@ -62,6 +63,7 @@ public class StepController : MonoBehaviour
         this.txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
         this.txt_instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
         this.txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
+        this.messageBar = GameObject.FindGameObjectWithTag("MessageBar").GetComponent<MessageBar>();
         foreach (var part in this.parts)
         {
             part.ActionCompleted += OnActionComplete;
@@ -103,6 +105,7 @@ public class StepController : MonoBehaviour
 
         this.CurrentStep = step;
         this.UpdateText(this.tutorialData.StepInformation[step]);
+        this.messageBar.DisplayMessage(this.tutorialData.StepInformation[step].Message);
 
         foreach (var part in this.parts)
         {
@@ -121,6 +124,7 @@ public class StepController : MonoBehaviour
 
         this.CurrentStep = step;
         this.UpdateText(this.tutorialData.StepInformation[step]);
+        this.messageBar.DisplayMessage(this.tutorialData.StepInformation[step].Message);
 
         foreach (var part in this.parts)
         {
