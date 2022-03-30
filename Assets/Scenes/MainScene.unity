@@ -510,15 +510,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 265571698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286eab670cf0c84418a06346509d8081, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ceeaeb1b9b824443a2bfb71a8654c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raw_Icon: {fileID: 0}
-  txt_Message: {fileID: 0}
-  icons:
-  - {fileID: 2800000, guid: 3f07c9a178f4d1c49a5d3d472ec93aa8, type: 3}
-  - {fileID: 2800000, guid: ebc0fb7cde268204a9bcc8e71244777a, type: 3}
-  - {fileID: 2800000, guid: 0cf994c2805491444b2573694db8d444, type: 3}
 --- !u!114 &265571701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1644,7 +1638,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 865804428}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 265571700}
+        m_TargetAssemblyTypeName: AudioBar, Assembly-CSharp
+        m_MethodName: OnPlayClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &865804428
 MonoBehaviour:
   m_ObjectHideFlags: 0
