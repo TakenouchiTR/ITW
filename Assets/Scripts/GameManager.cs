@@ -9,8 +9,6 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    private AudioSource audioSource;
-
     [SerializeField]
     private MessageBar messageBar;
 
@@ -33,7 +31,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        this.messageBar.gameObject.SetActive(false);
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
     }
 
@@ -85,17 +82,6 @@ public class GameManager : MonoBehaviour
         this.CurrentStepController.gameObject.SetActive(true);
         Destroy(prevStepController.gameObject);
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
-    }
-
-    IEnumerator PlayAudioCoroutine(string fileName)
-    {
-        string filePath = $"file://{Application.streamingAssetsPath}/Audio/{fileName}";
-        Debug.Log(filePath);
-        WWW request = new WWW(filePath);
-        yield return request;
-
-        this.audioSource.clip = request.GetAudioClip();
-        this.audioSource.Play();
     }
 
     public void OnNextClicked()

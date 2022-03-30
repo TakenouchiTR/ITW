@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
 using System;
-using Assets.Scripts;
 using Assets.Scripts.IO;
 
 /// <summary>
@@ -17,8 +15,12 @@ public class StepController : MonoBehaviour
     private int actionsRemaining;
 
     private TutorialData tutorialData;
+    private bool[] stepsVisited;
 
     private MessageBar messageBar;
+    private AudioBar audioBar;
+    private WarningPanel warningPanel;
+    private AudioSource audioSource;
     private TextMeshProUGUI txt_title;
     private TextMeshProUGUI txt_instructions;
     private TextMeshProUGUI txt_actionsRemaining;
@@ -40,6 +42,8 @@ public class StepController : MonoBehaviour
         get => curStep;
         private set => curStep = value;
     }
+
+    public StepInformation CurrentStepInformation => this.tutorialData.StepInformation[CurrentStep];
 
     /// <summary>
     ///     Gets the table of contents entries.
@@ -63,14 +67,29 @@ public class StepController : MonoBehaviour
         this.txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
         this.txt_instructions = GameObject.FindGameObjectWithTag("Instructions").GetComponent<TextMeshProUGUI>();
         this.txt_actionsRemaining = GameObject.FindGameObjectWithTag("ActionsRemaining").GetComponent<TextMeshProUGUI>();
-        this.messageBar = GameObject.FindGameObjectWithTag("MessageBar").GetComponent<MessageBar>();
+        this.messageBar = Resources.FindObjectsOfTypeAll<MessageBar>()[0];
+        this.audioBar = Resources.FindObjectsOfTypeAll<AudioBar>()[0];
+        this.warningPanel = Resources.FindObjectsOfTypeAll<WarningPanel>()[0];
+        this.audioSource = base.gameObject.AddComponent<AudioSource>();
+
+        this.audioBar.PlayClicked += this.OnAudioParPlayClicked;
         foreach (var part in this.parts)
         {
             part.ActionCompleted += OnActionComplete;
             part.Initialize();
         }
+        
         this.LoadSteps();
         this.GotoStepInstantly(0);
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var part in this.parts)
+        {
+            part.ActionCompleted -= OnActionComplete;
+        }
+        this.audioBar.PlayClicked -= this.OnAudioParPlayClicked;
     }
 
     /// <summary>
@@ -92,6 +111,7 @@ public class StepController : MonoBehaviour
         {
             this.parts[i].Steps = tutorialData.States[i];
         }
+        this.stepsVisited = new bool[this.tutorialData.StepCount];
     }
 
     /// <summary>
@@ -103,9 +123,7 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.CurrentStep = step;
-        this.UpdateText(this.tutorialData.StepInformation[step]);
-        this.messageBar.DisplayMessage(this.tutorialData.StepInformation[step].Message);
+        this.SwitchStep(step);
 
         foreach (var part in this.parts)
         {
@@ -122,14 +140,37 @@ public class StepController : MonoBehaviour
         if (!this.CanStartStep)
             return;
 
-        this.CurrentStep = step;
-        this.UpdateText(this.tutorialData.StepInformation[step]);
-        this.messageBar.DisplayMessage(this.tutorialData.StepInformation[step].Message);
+        this.SwitchStep(step);
 
         foreach (var part in this.parts)
         {
             part.GotoStepInstantly(step);
         }
+    }
+
+    private void SwitchStep(int step)
+    {
+        this.CurrentStep = step;
+        this.UpdateText(this.CurrentStepInformation);
+        this.messageBar.DisplayMessage(this.CurrentStepInformation.Message);
+
+        if (this.audioSource.isPlaying)
+        {
+            this.audioSource.Stop();
+        }
+
+        if (this.CurrentStepInformation.Message.Type == MessageType.Warning && !this.stepsVisited[step])
+        {
+            this.warningPanel.DisplayMessage(this.CurrentStepInformation.Message);
+        }
+
+        this.audioBar.gameObject.SetActive(this.CurrentStepInformation.HasAudioFile);
+        if (this.CurrentStepInformation.HasAudioFile && !this.stepsVisited[step])
+        {
+            base.StartCoroutine(PlayAudioCoroutine(this.CurrentStepInformation.AudioFileName));
+        }
+
+        this.stepsVisited[step] = true;
     }
 
     private void UpdateText(StepInformation information)
@@ -164,9 +205,31 @@ public class StepController : MonoBehaviour
         this.GotoStep(this.curStep);
     }
 
+    IEnumerator PlayAudioCoroutine(string fileName)
+    {
+        string filePath = $"file://{Application.streamingAssetsPath}/Audio/{fileName}";
+        WWW request = new WWW(filePath);
+        yield return request;
+
+        this.audioSource.clip = request.GetAudioClip();
+        this.audioSource.Play();
+    }
+
     public void OnActionComplete(object sender, EventArgs e)
     {
         this.actionsRemaining--;
         this.UpdateActionsRemainingDisplay();
+    }
+
+    public void OnAudioParPlayClicked(object sender, EventArgs e)
+    {
+        if (this.audioSource.isPlaying)
+        {
+            this.audioSource.Stop();
+        }
+        else
+        {
+            this.audioSource.Play();
+        }
     }
 }

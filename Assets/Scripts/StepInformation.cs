@@ -35,6 +35,8 @@ public class StepInformation
     /// </value>
     public string AudioFileName { get; set; }
 
+    public bool HasAudioFile => !string.IsNullOrEmpty(this.AudioFileName);
+
     /// <summary>
     ///     Gets or sets the message to be displayed when the step is loaded.
     /// </summary>
