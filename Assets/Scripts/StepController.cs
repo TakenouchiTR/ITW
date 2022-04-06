@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using Assets.Scripts.IO;
+using System.IO;
 
 /// <summary>
 ///     Controls the text and animations of a tutorial.
@@ -62,6 +63,8 @@ public class StepController : MonoBehaviour
     /// </value>
     private bool CanStartStep => !this.parts.Any(p => p.IsMoving);
 
+    private int ActionsInStep => this.parts.Where(p => p.IsActive).Count();
+
     private void Awake()
     {
         this.txt_title = GameObject.FindGameObjectWithTag("Title").GetComponent<TextMeshProUGUI>();
@@ -106,7 +109,8 @@ public class StepController : MonoBehaviour
     /// </summary>
     private void LoadSteps()
     {
-        this.tutorialData = TutorialReader.ReadFile(this.filePath);
+        string fullFilePath = $"{Application.streamingAssetsPath}/StepControllers/{this.filePath}";
+        this.tutorialData = TutorialReader.ReadFile(fullFilePath);
         for (int i = 0; i < tutorialData.PartCount; i++)
         {
             this.parts[i].Steps = tutorialData.States[i];
@@ -129,6 +133,8 @@ public class StepController : MonoBehaviour
         {
             part.GotoStep(step);
         }
+
+        ResetActionCount();
     }
 
     /// <summary>
@@ -146,6 +152,15 @@ public class StepController : MonoBehaviour
         {
             part.GotoStepInstantly(step);
         }
+
+        ResetActionCount();
+    }
+
+    private void ResetActionCount()
+    {
+        this.actionsRemaining = this.ActionsInStep;
+        this.totalActions = this.ActionsInStep;
+        UpdateActionsRemainingDisplay();
     }
 
     private void SwitchStep(int step)
@@ -207,7 +222,7 @@ public class StepController : MonoBehaviour
 
     IEnumerator PlayAudioCoroutine(string fileName)
     {
-        string filePath = $"file://{Application.streamingAssetsPath}/Audio/{fileName}";
+        string filePath = $"{Application.streamingAssetsPath}/Audio/{fileName}";
         WWW request = new WWW(filePath);
         yield return request;
 

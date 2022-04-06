@@ -4691,6 +4691,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 424681372}
     - target: {fileID: 3402495293114836222, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: filePath
+      value: DemoHelicopter.stp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3402495293114836222, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: instructions
       value: 
       objectReference: {fileID: 1264328900}

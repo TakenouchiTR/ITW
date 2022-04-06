@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403368115319362
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403368119165616
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403368130884344
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403368658512194
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403368720865985
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403369140981799
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,6 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fdbb503c08ac449ad7b8865a22a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
 --- !u!1 &8985403369326921303
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +776,7 @@ GameObject:
   - component: {fileID: 8985403369326921301}
   - component: {fileID: 8985403369326921302}
   m_Layer: 0
-  m_Name: SnowmalStepController
+  m_Name: SnowmanStepController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -816,4 +823,4 @@ MonoBehaviour:
   - {fileID: 462003208707374853}
   - {fileID: 3950405676067380177}
   - {fileID: 927965966548395375}
-  filePath: C:\Users\Shawn\Documents\TutorialTest\Snowman.stp
+  filePath: Snowman.stp
