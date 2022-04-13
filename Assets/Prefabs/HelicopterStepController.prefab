@@ -2018,7 +2018,7 @@ MonoBehaviour:
   - {fileID: 8776715380233731305}
   - {fileID: 1260728284504535318}
   - {fileID: 7256024130006701387}
-  filePath: C:\Users\Shawn\Documents\TutorialTest\Helicopter.stp
+  filePath: Helicopter.stp
 --- !u!1 &3443492815690253774
 GameObject:
   m_ObjectHideFlags: 0
