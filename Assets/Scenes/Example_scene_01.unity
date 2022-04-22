@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 6e1c109bb8959db42b5da60a2d1558ae, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: cf72828e53d47fc478892057aebbe385, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 1f651f5ac3f08bd4e9d3da3fddcaaa9e, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -9250,7 +9250,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1.8
@@ -9678,6 +9678,10 @@ PrefabInstance:
     - target: {fileID: 3402495293114836193, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3402495293114836222, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: filePath
+      value: DemoHelicopter.stp
       objectReference: {fileID: 0}
     - target: {fileID: 3402495293114836223, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: m_Name
@@ -13115,6 +13119,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6973113131250855228, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6973113132878288018, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

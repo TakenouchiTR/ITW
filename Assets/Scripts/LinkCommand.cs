@@ -90,5 +90,11 @@ namespace Assets.Scripts
         ///     A step of -1 will pick up where the previous tutorial left off.
         /// </summary>
         RTRN,
+
+        /// <summary>
+        ///     Opens a video with a specified filename.<br />
+        ///     Usage: "VDEO &lt;filename:string&gt"<br />
+        /// </summary>
+        VDEO,
     }
 }
