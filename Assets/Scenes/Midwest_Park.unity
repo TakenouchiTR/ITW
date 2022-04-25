@@ -4169,9 +4169,25 @@ PrefabInstance:
       value: 131.821
       objectReference: {fileID: 0}
     - target: {fileID: 3457538068198251820, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: stepControllers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457538068198251820, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
       propertyPath: stepControllers.Array.data[0]
       value: 
       objectReference: {fileID: 405996824}
+    - target: {fileID: 3457538068198251820, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: stepControllers.Array.data[1]
+      value: 
+      objectReference: {fileID: 405996824}
+    - target: {fileID: 3457538068198251820, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: stepControllerPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457538068198251820, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: stepControllerPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 8985403369326921303, guid: ec654b174c46efb45852d00592c451e6, type: 3}
     - target: {fileID: 6973113131088501597, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4190,6 +4206,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6973113131250855228, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6973113132878288018, guid: 624a783ebeb501946a8d60f399dc9402, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
