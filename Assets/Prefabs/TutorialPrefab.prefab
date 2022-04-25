@@ -309,6 +309,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 1555.2001
       objectReference: {fileID: 0}
+    - target: {fileID: 7121752968993023865, guid: 2fc7d30e8e7b1074ca952aba14f3721b, type: 3}
+      propertyPath: m_AudioOutputMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121752968993023865, guid: 2fc7d30e8e7b1074ca952aba14f3721b, type: 3}
+      propertyPath: m_TargetAudioSources.Array.data[0]
+      value: 
+      objectReference: {fileID: 3747134567536429298}
     - target: {fileID: 7160302232846150819, guid: 2fc7d30e8e7b1074ca952aba14f3721b, type: 3}
       propertyPath: m_Name
       value: VideoPanel
@@ -346,6 +354,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7e7d3bb24670947b135d27eed3d318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &3747134567536429298 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2205978037798398949, guid: 2fc7d30e8e7b1074ca952aba14f3721b, type: 3}
+  m_PrefabInstance: {fileID: 3070692294342599447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3457538067255986772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -353,29 +366,57 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3457538066816013878}
     m_Modifications:
+    - target: {fileID: 5710245464976916614, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245465013613862, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245465013613862, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.26666668
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245465013613862, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.26666668
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245465013613862, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Color.r
+      value: 0.26666668
+      objectReference: {fileID: 0}
     - target: {fileID: 5710245465552081921, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5710245465571370539, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245465600845375, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5710245465761425256, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5710245465761425256, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5710245465862918409, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5710245465862918409, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5710245465862918409, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5710245466094679091, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: LinkClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -528,6 +569,10 @@ PrefabInstance:
     - target: {fileID: 5710245466945959711, guid: af794895e63f7c54d96219982377b57c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnPrevClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710245466957093997, guid: af794895e63f7c54d96219982377b57c, type: 3}
+      propertyPath: m_Sprite
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af794895e63f7c54d96219982377b57c, type: 3}

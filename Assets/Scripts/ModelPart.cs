@@ -9,7 +9,7 @@ using UnityEngine;
 public class ModelPart : MonoBehaviour
 {
     private const float MoveSpeed = 5;
-    private const float ArrowAppearDelay = 5;
+    private const float ArrowAppearDelay = 2;
 
     private bool isActive = false;
     private int curStep = 0;
