@@ -156,6 +156,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2984053225478972216, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3402495293114836193, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -207,6 +211,10 @@ PrefabInstance:
     - target: {fileID: 3402495293114836223, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
       propertyPath: m_Name
       value: HelicopterStepController
+      objectReference: {fileID: 0}
+    - target: {fileID: 8475120798900625483, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7947b1bb22111a24a89e4642c127cc5f, type: 3}

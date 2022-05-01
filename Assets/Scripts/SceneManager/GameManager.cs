@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -38,6 +39,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         this.tableOfContents.SetTableContents(CurrentStepController.TableOfContentsEntries);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     /// <summary>
