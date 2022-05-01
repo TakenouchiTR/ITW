@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             SceneManager.LoadScene(0);
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
